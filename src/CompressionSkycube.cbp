@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="CompressionSkycube" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/CompressionSkycube" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-fopenmp" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/CompressionSkycube" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-std=c++11" />
+					<Add option="-w" />
+					<Add option="-fopenmp" />
+					<Add option="-finline" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="/usr/lib/gcc/x86_64-linux-gnu/4.8.4/libgomp.so" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fopenmp" />
+		</Compiler>
+		<Linker>
+			<Add library="/usr/lib/gcc/x86_64-linux-gnu/4.8/libgomp.so" />
+		</Linker>
+		<Unit filename="affichage.h" />
+		<Unit filename="algoglouton.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="bskytree.h" />
+		<Unit filename="compressed.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="declarations.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="experimentations.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="generateKossmann.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="generateur.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="generateurData/DataGenerator.cpp" />
+		<Unit filename="generateurData/Gaussian.cpp" />
+		<Unit filename="generateurData/ValueGenerator.cpp" />
+		<Unit filename="generateurData/VectorCommon.cpp" />
+		<Unit filename="kdomskycube.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="negative.h" />
+		<Unit filename="skyline.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

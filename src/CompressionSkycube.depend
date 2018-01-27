@@ -1,0 +1,877 @@
+# depslib dependency file v1.0
+1444918728 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/main.cpp
+	"generateur.h"
+	"skyline.h"
+	"bskytree.h"
+	"compression.h"
+	"structComparaison.h"
+	"experimentations.h"
+	"../generateurData/DataGenerator.h"
+	"../bitmap/traite_index.h"
+	"generateur.h"
+	"skyline.h"
+	"bskytree.h"
+	"compressed.h"
+	"optimisation.h"
+	"optimisation2.h"
+	"optimisation3.h"
+	"experimentations.h"
+
+1444919455 tations.h"
+
+1443345687 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/skyline.h
+	"declarations.h"
+	"declarations.h"
+
+1444919329 ons.h"
+
+1442688338 source:/home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/main.cpp
+	"generateur.h"
+	"skyline.h"
+	"bskytree.h"
+	"compression.h"
+	"experimentations.h"
+
+1442654797 /home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/skyline.h
+	"declarations.h"
+
+1444916839 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/generateur.h
+	"declarations.h"
+	"declarations.h"
+
+1444554232 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/declarations.h
+	<iostream>
+	<list>
+	<vector>
+	<set>
+	<bitset>
+	<ctime>
+	<fstream>
+	<sstream>
+	<map>
+	<stack>
+	<stdlib.h>
+	<math.h>
+	<iostream>
+	<list>
+	<vector>
+	<set>
+	<bitset>
+	<ctime>
+	<fstream>
+	<sstream>
+	<map>
+	<stack>
+	<stdlib.h>
+	<math.h>
+	<algorithm>
+
+1444554232 >
+
+1441373563 
+
+1444121458 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/compression.h
+	"declarations.h"
+	"declarations.h"
+
+1444916502 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/experimentations.h
+	"declarations.h"
+	"declarations.h"
+
+1441277442 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/compression2.h
+	"compression.h"
+
+1441450916 on.h"
+
+1442398882 /home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/generateur.h
+	"declarations.h"
+
+1442653868 /home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/declarations.h
+	<iostream>
+	<list>
+	<vector>
+	<set>
+	<math.h>
+	<bitset>
+	<ctime>
+	<fstream>
+	<sstream>
+	<map>
+	<stack>
+	<vector>
+	<iostream>
+	<cstdlib>
+	<utility>
+	<list>
+	<iterator>
+	<set>
+	<hash_map>
+	<omp.h>
+	<stdexcept>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cstdlib>
+	<cstring>
+	<iostream>
+	<string>
+
+1442689557 /home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/compression.h
+	"declarations.h"
+
+1441450916 /home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/compression2.h
+	"compression.h"
+
+1442653931 /home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/experimentations.h
+	"declarations.h"
+
+1441557192 /home/pat/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/bskytree.h
+	"declarations.h"
+
+1441557192 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/bskytree.h
+	"declarations.h"
+	"declarations.h"
+
+1443439108 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/structComparaison.h
+	"declarations.h"
+	"declarations.h"
+
+1444919455 source:f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\main.cpp
+	"../generateurData/DataGenerator.h"
+	"../bitmap/traite_index.h"
+	"generateur.h"
+	"skyline.h"
+	"bskytree.h"
+	"compressed.h"
+	"optimisation.h"
+	"optimisation2.h"
+	"optimisation3.h"
+	"experimentations.h"
+
+1444916839 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\generateur.h
+	"declarations.h"
+
+1444554232 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\declarations.h
+	<iostream>
+	<list>
+	<vector>
+	<set>
+	<bitset>
+	<ctime>
+	<fstream>
+	<sstream>
+	<map>
+	<stack>
+	<stdlib.h>
+	<math.h>
+	<algorithm>
+
+1443345687 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\skyline.h
+	"declarations.h"
+
+1441557192 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\bskytree.h
+	"declarations.h"
+
+1443365874 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\compression.h
+	"declarations.h"
+
+1443381791 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\structcomparaison.h
+	"declarations.h"
+
+1444919356 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\experimentations.h
+	"declarations.h"
+
+1444724590 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/optimisation.h
+	"declarations.h"
+
+1444328572 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/compressed.h
+	"declarations.h"
+
+1444640925 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/optimisation2.h
+	"declarations.h"
+
+1444918768 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/optimisation3.h
+	<sstream>
+	<string>
+	<unordered_map>
+	<unordered_set>
+	"declarations.h"
+
+1444506757 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/optimisation4.h
+	"declarations.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/DataGenerator.h
+	<cstdlib>
+	<ctime>
+	<fstream>
+	<sstream>
+	<string>
+	<map>
+	<vector>
+	<iostream>
+	"VectorCommon.h"
+	"ValueGenerator.h"
+
+1441373563 rator.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/VectorCommon.h
+	<stdio.h>
+	<sys/types.h>
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/ValueGenerator.h
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	"Gaussian.h"
+
+1441373563 h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/Gaussian.h
+	"VectorCommon.h"
+	<math.h>
+	<stdlib.h>
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/Gaussian.cpp
+	"Gaussian.h"
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/ValueGenerator.cpp
+	"ValueGenerator.h"
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/VectorCommon.cpp
+	"VectorCommon.h"
+
+1441373563 mon.h"
+
+1444726561 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/DataGenerator.cpp
+	"DataGenerator.h"
+	<stdlib.h>
+
+1444916745 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/traite_index.h
+	<fstream>
+	<vector>
+	<iostream>
+	<cstdlib>
+	<map>
+	<utility>
+	<list>
+	<iterator>
+	<set>
+	<hash_map>
+	<omp.h>
+	<stdexcept>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cstdlib>
+	<cstring>
+	<iostream>
+	<string>
+	<sstream>
+	<unordered_set>
+	<unordered_map>
+	"ewah.h"
+
+1444818808 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/ewah.h
+	<algorithm>
+	<vector>
+	"ewahutil.h"
+	"boolarray.h"
+	"runninglengthword.h"
+
+1444818808 ngthword.h"
+
+1444818669 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/ewahutil.h
+	<string.h>
+	<stdlib.h>
+	<iso646.h>
+	<limits.h>
+	<stdint.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<string>
+	<stdexcept>
+	<cstddef>
+	<algorithm>
+	<sstream>
+
+1444818668 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/boolarray.h
+	<iso646.h>
+	<stdarg.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<stdexcept>
+	<sstream>
+
+1444824938 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/runninglengthword.h
+
+1444726561 source:f:\dropbox\these\code\code_2015\code_cpp\generateurdata\datagenerator.cpp
+	"DataGenerator.h"
+	<stdlib.h>
+
+1441373563 f:\dropbox\these\code\code_2015\code_cpp\generateurdata\datagenerator.h
+	<cstdlib>
+	<ctime>
+	<fstream>
+	<sstream>
+	<string>
+	<map>
+	<vector>
+	<iostream>
+	"VectorCommon.h"
+	"ValueGenerator.h"
+
+1441373563 f:\dropbox\these\code\code_2015\code_cpp\generateurdata\vectorcommon.h
+	<stdio.h>
+	<sys/types.h>
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1441373563 f:\dropbox\these\code\code_2015\code_cpp\generateurdata\valuegenerator.h
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	"Gaussian.h"
+
+1441373563 f:\dropbox\these\code\code_2015\code_cpp\generateurdata\gaussian.h
+	"VectorCommon.h"
+	<math.h>
+	<stdlib.h>
+
+1441373563 source:f:\dropbox\these\code\code_2015\code_cpp\generateurdata\gaussian.cpp
+	"Gaussian.h"
+
+1441373563 source:f:\dropbox\these\code\code_2015\code_cpp\generateurdata\valuegenerator.cpp
+	"ValueGenerator.h"
+
+1441373563 source:f:\dropbox\these\code\code_2015\code_cpp\generateurdata\vectorcommon.cpp
+	"VectorCommon.h"
+
+1444916745 f:\dropbox\these\code\code_2015\code_cpp\bitmap\traite_index.h
+	<fstream>
+	<vector>
+	<iostream>
+	<cstdlib>
+	<map>
+	<utility>
+	<list>
+	<iterator>
+	<set>
+	<hash_map>
+	<omp.h>
+	<stdexcept>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cstdlib>
+	<cstring>
+	<iostream>
+	<string>
+	<sstream>
+	<unordered_set>
+	<unordered_map>
+	"ewah.h"
+
+1444818808 f:\dropbox\these\code\code_2015\code_cpp\bitmap\ewah.h
+	<algorithm>
+	<vector>
+	"ewahutil.h"
+	"boolarray.h"
+	"runninglengthword.h"
+
+1444818669 f:\dropbox\these\code\code_2015\code_cpp\bitmap\ewahutil.h
+	<string.h>
+	<stdlib.h>
+	<iso646.h>
+	<limits.h>
+	<stdint.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<string>
+	<stdexcept>
+	<cstddef>
+	<algorithm>
+	<sstream>
+
+1444818668 f:\dropbox\these\code\code_2015\code_cpp\bitmap\boolarray.h
+	<iso646.h>
+	<stdarg.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<stdexcept>
+	<sstream>
+
+1444824938 f:\dropbox\these\code\code_2015\code_cpp\bitmap\runninglengthword.h
+
+1444328572 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\compressed.h
+	"declarations.h"
+
+1444724590 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\optimisation.h
+	"declarations.h"
+
+1444640925 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\optimisation2.h
+	"declarations.h"
+
+1444919329 f:\dropbox\these\code\code_2015\code_cpp\compressionskycube\optimisation3.h
+	<sstream>
+	<string>
+	<unordered_map>
+	<unordered_set>
+	"declarations.h"
+
+1448019814 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/DataGenerator.cpp
+	"DataGenerator.h"
+	<stdlib.h>
+
+1448019857 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/DataGenerator.h
+	<cstdlib>
+	<ctime>
+	<fstream>
+	<sstream>
+	<string>
+	<map>
+	<vector>
+	<iostream>
+	"VectorCommon.h"
+	"ValueGenerator.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/VectorCommon.h
+	<stdio.h>
+	<sys/types.h>
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/ValueGenerator.h
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	"Gaussian.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/Gaussian.h
+	"VectorCommon.h"
+	<math.h>
+	<stdlib.h>
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/Gaussian.cpp
+	"Gaussian.h"
+
+1445351940 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/ValueGenerator.cpp
+	"ValueGenerator.h"
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/generateurData/VectorCommon.cpp
+	"VectorCommon.h"
+
+1451756717 source:/home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/main.cpp
+	"../generateurData/DataGenerator.h"
+	"../bitmap/traite_index.h"
+	"generateur.h"
+	"generateKossmann.h"
+	"affichage.h"
+	"skyline.h"
+	"bskytree.h"
+	"compressed.h"
+	"algoglouton.h"
+	"negative.h"
+	"negative2.h"
+	"experimentations.h"
+
+1447410173 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/traite_index.h
+	<fstream>
+	<vector>
+	<iostream>
+	<cstdlib>
+	<map>
+	<utility>
+	<list>
+	<iterator>
+	<set>
+	<hash_map>
+	<omp.h>
+	<stdexcept>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cstdlib>
+	<cstring>
+	<iostream>
+	<string>
+	<sstream>
+	<unordered_set>
+	<unordered_map>
+	"ewah.h"
+
+1444818808 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/ewah.h
+	<algorithm>
+	<vector>
+	"ewahutil.h"
+	"boolarray.h"
+	"runninglengthword.h"
+
+1444818669 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/ewahutil.h
+	<string.h>
+	<stdlib.h>
+	<iso646.h>
+	<limits.h>
+	<stdint.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<string>
+	<stdexcept>
+	<cstddef>
+	<algorithm>
+	<sstream>
+
+1444818668 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/boolarray.h
+	<iso646.h>
+	<stdarg.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<stdexcept>
+	<sstream>
+
+1444824938 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/bitmap/runninglengthword.h
+
+1450440196 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/generateur.h
+	"declarations.h"
+
+1451754582 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/declarations.h
+	<iostream>
+	<list>
+	<vector>
+	<bitset>
+	<ctime>
+	<fstream>
+	<sstream>
+	<stack>
+	<stdlib.h>
+	<math.h>
+	<algorithm>
+	<set>
+	<map>
+	<unordered_set>
+	<omp.h>
+
+1450877964 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/skyline.h
+	"declarations.h"
+
+1446648267 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/bskytree.h
+	"declarations.h"
+
+1450878273 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/compressed.h
+	"declarations.h"
+
+1449502558 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/optimisation.h
+	"declarations.h"
+
+1449489798 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/optimisation2.h
+
+1450440900 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/optimisation3.h
+
+1451144161 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/experimentations.h
+	"declarations.h"
+
+1445422228 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/classification.h
+	"declarations.h"
+
+1446630116 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/generateKossmann.h
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	<math.h>
+
+1450878273 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/algoglouton.h
+	"declarations.h"
+
+1448048914 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/affichage.h
+	"declarations.h"
+
+1451750752 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/negative.h
+
+1451755215 /home/patrick/Dropbox/THESE/Code/Code_2015/Code_CPP/CompressionSkycube/negative2.h
+
+1448019814 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/DataGenerator.cpp
+	"DataGenerator.h"
+	<stdlib.h>
+
+1448019857 /home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/DataGenerator.h
+	<cstdlib>
+	<ctime>
+	<fstream>
+	<sstream>
+	<string>
+	<map>
+	<vector>
+	<iostream>
+	"VectorCommon.h"
+	"ValueGenerator.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/VectorCommon.h
+	<stdio.h>
+	<sys/types.h>
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/ValueGenerator.h
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	"Gaussian.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/Gaussian.h
+	"VectorCommon.h"
+	<math.h>
+	<stdlib.h>
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/Gaussian.cpp
+	"Gaussian.h"
+
+1445351940 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/ValueGenerator.cpp
+	"ValueGenerator.h"
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/generateurData/VectorCommon.cpp
+	"VectorCommon.h"
+
+1466690890 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/main.cpp
+	"generateurData/DataGenerator.h"
+	"bitmap/traite_index.h"
+	"generateur.h"
+	"generateKossmann.h"
+	"affichage.h"
+	"skyline.h"
+	"bskytree.h"
+	"compressed.h"
+	"algoglouton.h"
+	"negative.h"
+	"kdomskycube.h"
+	"experimentations.h"
+
+1447410173 /home/patrick/Dropbox/THESE/Code/Code_CPP/bitmap/traite_index.h
+	<fstream>
+	<vector>
+	<iostream>
+	<cstdlib>
+	<map>
+	<utility>
+	<list>
+	<iterator>
+	<set>
+	<hash_map>
+	<omp.h>
+	<stdexcept>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cstdlib>
+	<cstring>
+	<iostream>
+	<string>
+	<sstream>
+	<unordered_set>
+	<unordered_map>
+	"ewah.h"
+
+1444818808 /home/patrick/Dropbox/THESE/Code/Code_CPP/bitmap/ewah.h
+	<algorithm>
+	<vector>
+	"ewahutil.h"
+	"boolarray.h"
+	"runninglengthword.h"
+
+1444818669 /home/patrick/Dropbox/THESE/Code/Code_CPP/bitmap/ewahutil.h
+	<string.h>
+	<stdlib.h>
+	<iso646.h>
+	<limits.h>
+	<stdint.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<string>
+	<stdexcept>
+	<cstddef>
+	<algorithm>
+	<sstream>
+
+1444818668 /home/patrick/Dropbox/THESE/Code/Code_CPP/bitmap/boolarray.h
+	<iso646.h>
+	<stdarg.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<stdexcept>
+	<sstream>
+
+1444824938 /home/patrick/Dropbox/THESE/Code/Code_CPP/bitmap/runninglengthword.h
+
+1460540798 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateur.h
+	"declarations.h"
+
+1466689273 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/declarations.h
+	<iostream>
+	<list>
+	<vector>
+	<bitset>
+	<ctime>
+	<fstream>
+	<sstream>
+	<stack>
+	<stdlib.h>
+	<math.h>
+	<algorithm>
+	<set>
+	<map>
+	<unordered_set>
+	<unordered_map>
+	<omp.h>
+	<queue>
+
+1446630116 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateKossmann.h
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	<math.h>
+
+1454452352 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/affichage.h
+	"declarations.h"
+
+1450877964 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/skyline.h
+	"declarations.h"
+
+1446648267 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/bskytree.h
+	"declarations.h"
+
+1460709526 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/compressed.h
+	"declarations.h"
+
+1455789322 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/algoglouton.h
+	"declarations.h"
+
+1466691358 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/negative.h
+
+1454274691 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/negative2.h
+
+1466084549 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/experimentations.h
+	"declarations.h"
+
+1454274691 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/maintenance_insertion.h
+
+1461583626 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/kdomskycube.h
+	"declarations.h"
+
+1448019857 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/DataGenerator.h
+	<cstdlib>
+	<ctime>
+	<fstream>
+	<sstream>
+	<string>
+	<map>
+	<vector>
+	<iostream>
+	"VectorCommon.h"
+	"ValueGenerator.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/VectorCommon.h
+	<stdio.h>
+	<sys/types.h>
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/ValueGenerator.h
+	<math.h>
+	<stdlib.h>
+	<stdio.h>
+	"Gaussian.h"
+
+1441373563 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/Gaussian.h
+	"VectorCommon.h"
+	<math.h>
+	<stdlib.h>
+
+1447410173 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/bitmap/traite_index.h
+	<fstream>
+	<vector>
+	<iostream>
+	<cstdlib>
+	<map>
+	<utility>
+	<list>
+	<iterator>
+	<set>
+	<hash_map>
+	<omp.h>
+	<stdexcept>
+	<algorithm>
+	<stdexcept>
+	<fstream>
+	<cstdlib>
+	<cstring>
+	<iostream>
+	<string>
+	<sstream>
+	<unordered_set>
+	<unordered_map>
+	"ewah.h"
+
+1444818808 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/bitmap/ewah.h
+	<algorithm>
+	<vector>
+	"ewahutil.h"
+	"boolarray.h"
+	"runninglengthword.h"
+
+1444818669 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/bitmap/ewahutil.h
+	<string.h>
+	<stdlib.h>
+	<iso646.h>
+	<limits.h>
+	<stdint.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<string>
+	<stdexcept>
+	<cstddef>
+	<algorithm>
+	<sstream>
+
+1444818668 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/bitmap/boolarray.h
+	<iso646.h>
+	<stdarg.h>
+	<cassert>
+	<iostream>
+	<vector>
+	<stdexcept>
+	<sstream>
+
+1444824938 /home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/bitmap/runninglengthword.h
+
+1448019814 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/DataGenerator.cpp
+	"DataGenerator.h"
+	<stdlib.h>
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/Gaussian.cpp
+	"Gaussian.h"
+
+1445351940 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/ValueGenerator.cpp
+	"ValueGenerator.h"
+
+1441373563 source:/home/patrick/Dropbox/THESE/Code/Code_CPP/CompressionSkycube/generateurData/VectorCommon.cpp
+	"VectorCommon.h"
+
