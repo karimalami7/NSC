@@ -2,11 +2,11 @@
 
 NSC is an index structure designed to speed up multi-dimensional skyline query answering. It consists of associating to a tuple, the subspaces where it is dominated. Those subspaces are encoded in a way that minimize memory consumption.
 
-NSC has been accepted in the conference **CIKM 2016** through the paper [Computing and summarizing the negative Skycube](https://dl.acm.org/citation.cfm?doid=2983323.2983759).
+NSC has been presented at **CIKM 2016** conference through the paper [Computing and summarizing the negative Skycube](https://dl.acm.org/citation.cfm?doid=2983323.2983759).
 
-Its efficiency wrt building time, memory usage and skyline query answering has been shown in this paper.
+Its efficiency wrt building time, memory usage and skyline query answering has been shown in that paper.
 
-Afterward we studied its incremental maintenance. Few state of the art methods worked on managing the skyline upon deletions and insertions.
+Afterward we studied its incremental maintenance. 
 
 ### Repository organization
 
@@ -18,9 +18,9 @@ This repository includes NSC sources as well as state of the art methods to buil
 
   * NSC
   * NSC with counters
-  * BSkyTree
+  * BSkyTree (authors version)
   * Naive method
-  * Compressed Skycube (CSC)
+  * Compressed Skycube (CSC) (our own version)
 
 ### Building and answering Skycube
 
@@ -52,5 +52,5 @@ Arguments:
 
 6. List of methods to be run: (NSC, NSCwM, TREE, NAIF, CSC).
 
-Outputs are (i) building time (for methods that build a structure), (ii) skyline query execution time for one dimension, (iii) Skycube query execution time.
+Outputs are (i) building time (for methods that build a structure), (ii) skyline query execution time for one random query, (iii) Skycube query execution time.
 
