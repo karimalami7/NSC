@@ -12,8 +12,8 @@
 #
 #	argv[5] : NBTHREARDS = number of parallel threads to be run.
 #
-#	argv[6-15] = list of wanted methods
+#	argv[6-15] = list of wanted methods {NSC, NSCwM, TREE, NAIF, CSC}
 # 
 #
 
-./main INDE 100 10000 10 4 NSCwM
+./main INDE 100 10000 10 4 NAIF TREE CSC NSC NSCwM

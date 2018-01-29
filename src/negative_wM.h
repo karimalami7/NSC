@@ -6,7 +6,7 @@ namespace NEG_wM {
 
 
 int parseLine(char* line){
-    // This assumes that a digit will be found and the line ends in " Kb".
+    // This assumes that a digit will be found, the line ends in " Kb".
     int i = strlen(line);
     const char* p = line;
     while (*p <'0' || *p > '9') p++;
@@ -15,7 +15,7 @@ int parseLine(char* line){
     return i;
 }
 
-int getMemoryValue(){ //Note: this value is in KB!
+int getMemoryValue(){ //this value is in KB!
     FILE* file = fopen("/proc/self/status", "r");
     int result = -1;
     char line[128];
@@ -47,7 +47,7 @@ void visualisation_pairs(vector<mapDualSpace> listMapDualSpace){
 
 
 
-void build_pairs(USetDualSpace &usDS ,mapDualSpace &mDS, TableTuple& donnees, TableTuple& topmost, Space d, int i){
+void build_pairs(mapDualSpace &mDS, TableTuple& donnees, TableTuple& topmost, Space d, int i){
     
     
     USetDualSpace usDS_local;
@@ -59,7 +59,6 @@ void build_pairs(USetDualSpace &usDS ,mapDualSpace &mDS, TableTuple& donnees, Ta
     for (int l=0;l<topmost.size();l++){
         ds=NEG::domDualSubspace_1(topmost[l], donnees[i], d);
 
-       // usDS_local.insert(ds);
         auto it = mDS_local.find(ds);
         if (it != mDS_local.end()){
             it->second++;
@@ -118,11 +117,10 @@ void build_pairs(USetDualSpace &usDS ,mapDualSpace &mDS, TableTuple& donnees, Ta
     }
     mDS_local.swap(tmp_mDS);
 
-    usDS.swap(usDS_local);
     mDS.swap(mDS_local);
 }
 
-void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, TableTuple& donnees, TableTuple& topmost,values_map& topmost_map, Space d){
+void negativeSkycubeAux(vector<mapDualSpace> &listMapDualSpace, TableTuple& donnees, TableTuple& topmost,values_map& topmost_map, Space d){
 
 
     long structSize;
@@ -139,40 +137,82 @@ void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, vector<mapDual
     #pragma omp parallel for num_threads(NB_THREADS) schedule(dynamic)
     for (i=0;i<n;++i){
 
-        USetDualSpace USDS;
+        build_pairs(listMapDualSpace[i], donnees, topmost, d, i);   
 
-        build_pairs(listUSetDualSpace[i], listMapDualSpace[i], donnees, topmost, d, i);
-      
-
-        //listUSetDualSpace[i].clear();
-        //cout << "uset  " <<  listUSetDualSpace[i].size() << "  map  " << listMapDualSpace[i].size() << endl;
-        //if (((i+1) % 1000) ==0)cout << i<<" "<<getMemoryValue() << endl;
     }
-
-    // visualisation pairs
-
-    //visualisation_pairs(listUSetDualSpace);
 
 }
 
 
 
+long creationStructureNSC(NegSkyStrAux &structure, map<DataType,DataType> &newIndexes, map<DataType,DataType> &prvIndexes, vector<mapDualSpace> &listMapDualSpace, Space d){
+    Space all=(1<<d)-1;
+    long structSize=0;
+    DataType i;
+    DataType nbTuples=0;
 
+    for (i=0;i<(DataType)listMapDualSpace.size();++i){ // on boucle sur tous les tuples taille n
+        if (listMapDualSpace[i].size()!=1 || (listMapDualSpace[i].begin())->first.dom<all){  
+            DataType idTuple=nbTuples;
+            for (auto it=listMapDualSpace[i].begin();it!=listMapDualSpace[i].end();++it){ // on boucle sur tous les paris (X|Y) de ce tuple
+                Space spaceXY=it->first.dom+it->first.equ;
+                Space spaceY=it->first.equ;
+                auto it2=structure.find(spaceXY);
+                if (it2==structure.end()){
+                    unordered_map<Space,vector<DataType>> mapAux;
+                    vector<DataType> vectAux;
+                    vectAux.push_back(idTuple);
+                    mapAux.insert(pair<Space, vector<DataType>>(spaceY,vectAux));
+                    structure.insert(pair<Space,unordered_map<Space,vector<DataType>>>(spaceXY,mapAux));
+                }else{
+                    auto it3=(it2->second).find(spaceY);
+                    if (it3==(it2->second).end()){
+                        vector<DataType> vectAux;
+                        vectAux.push_back(idTuple);
+                        (it2->second).insert(pair<Space, vector<DataType>>(spaceY,vectAux));
+                    }else{
+                        (it3->second).push_back(idTuple);
+                    }
+                }
+                structSize++;
+            }
+            newIndexes[i]=nbTuples;
+            prvIndexes[nbTuples]=i;
+            nbTuples++;
+        }
+    }
+    return structSize;
+}
 
+long negativeSkycube(NegSkyStr &structure, map<DataType,DataType> &newIndexes, map<DataType,DataType> &prvIndexes, vector<mapDualSpace> listMapDualSpace, Space d){
 
+    long structSize;
+    Space spXY, spY;
 
+    NegSkyStrAux structure0;
+    structSize = creationStructureNSC(structure0, newIndexes, prvIndexes, listMapDualSpace, d);
+    
+    for (auto itXY=structure0.begin();itXY!=structure0.end();itXY++){
+        spXY=itXY->first;
+        vector<pair<Space,vector<DataType>>> vY;
+        for (auto itY=(itXY->second).begin();itY!=(itXY->second).end();itY++){
+            spY=itY->first;
+            vector<Space> vId;
+            for (auto itId=(itY->second).begin();itId!=(itY->second).end();itId++){
+                vId.push_back(*itId);
+            }
+            vY.push_back(pair<Space, vector<DataType>>(spY, vId));
+        }
+        structure.push_back(pair<Space, vector<pair<Space,vector<DataType>>>>(spXY, vY));
+    }
+    
+    //display_NSC(structure, newIndexes, prvIndexes, d);
+    return structSize;
+}
 
+// Returns impact of every tuple in the topmost
 
-
-
-
-
-
-
-
-// tuple_effect: calcul l'impact d'un tuple sur T
-
-void tuple_impact(string dataName, TableTuple& donnees, TableTuple& topmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, Space d){
+void tuple_impact(string dataName, TableTuple& donnees, TableTuple& topmost, vector<mapDualSpace> &listMapDualSpace, Space d){
 
     double debut = omp_get_wtime();
 
@@ -226,14 +266,13 @@ void tuple_impact(string dataName, TableTuple& donnees, TableTuple& topmost, vec
     }
     else
     {
-        cout << "ERREUR: Impossible d'ouvrir le fichier." << endl;
+        cout << "ERROR: Couldn't open the file." << endl;
     }
 
     omp_destroy_lock(&writelock);
 
     cerr << "*done* "<< endl;
 }
-
 
 
 
@@ -302,7 +341,7 @@ void identify_topmost_pairs(TableTuple& donnees, TableTuple& topmost,  TableTupl
 
 
 
-void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delete ,vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, Space d, vector<int> notInTopmost){
+void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delete ,vector<mapDualSpace> &listMapDualSpace, Space d, vector<int> notInTopmost){
 
     int n = donnees.size();
 
@@ -325,12 +364,6 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
     //2- if yes, recalculate pairs of i if id_tuple_to_delete affects i
 
     if (inTopmost){        
-
-        // tmp_donnees.erase(tmp_donnees.begin()+id_tuple_to_delete);
-        // vector<Space> attList;
-        // for (int l=1;l<=d;l++) attList.push_back(l);
-        // ExecuteBSkyTree(attList, tmp_donnees, new_topmost);    
-        //cout << "TM skytree"<< new_topmost.size()<<endl;    
         
         //2.1 identify descendants
 
@@ -343,7 +376,6 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
              new_topmost.push_back(topmost[i]);
             }
         } 
-        // cerr<<"-- desc size: "<<desc_in_topmost.size()<<endl;
         
         
         // 2.2 identify the impacted tuples
@@ -354,20 +386,15 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
         DualSpace ds;
             if (id_tuple_to_delete!=i){
 
-                ds = NEG::domDualSubspace_1(donnees[id_tuple_to_delete], donnees[i], d);
-                //cout << ds.dom<<" " <<ds.equ<<endl;
+                ds = NEG::domDualSubspace_1(donnees[id_tuple_to_delete], donnees[i], d);;
 
                 auto it = listMapDualSpace[i].find(ds);
                 if (it !=listMapDualSpace[i].end()){
                     if (it->second==1)
                     {   
-                        //tuples_impacted[i]=1;
-                        //total_tuples_impacted++;
-                        USetDualSpace USDS;
-                        //listUSetDualSpace[i].clear();
+
                         listMapDualSpace[i].clear();
-                        build_pairs(USDS, listMapDualSpace[i], donnees, new_topmost, d, i);
-                        //listMapDualSpace[i].erase(it);
+                        build_pairs(listMapDualSpace[i], donnees, new_topmost, d, i);
                     }else{
                         it->second--;
                     }
@@ -375,9 +402,6 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
                 } 
             }   
         }
-
-
-
 
 
         //updating data structures of NSCwM 
@@ -393,7 +417,7 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
         
         donnees.erase(donnees.begin()+id_tuple_to_delete);
         listMapDualSpace.erase(listMapDualSpace.begin()+id_tuple_to_delete);
-        listUSetDualSpace.erase(listUSetDualSpace.begin()+id_tuple_to_delete);
+
     }
     else{
         // if id_tuple_to_delete is not in TM
@@ -401,15 +425,12 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
 
         listMapDualSpace.erase(listMapDualSpace.begin()+id_tuple_to_delete);
 
-        listUSetDualSpace.erase(listUSetDualSpace.begin()+id_tuple_to_delete);
-
-        //notInTopmost.erase();
 
     }
 
 }
 
-void BatchDeleteSetOfTuples(TableTuple& donnees, TableTuple& topmost, vector<int> id_tuples_to_delete ,vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, Space d){
+void BatchDeleteSetOfTuples(TableTuple& donnees, TableTuple& topmost, vector<int> id_tuples_to_delete, vector<mapDualSpace> &listMapDualSpace, Space d){
 
     TableTuple tmp_topmost;
     TableTuple tmp_donnees(donnees);
@@ -475,15 +496,13 @@ void BatchDeleteSetOfTuples(TableTuple& donnees, TableTuple& topmost, vector<int
     for (int i =0; i < vc_tuples_impacted.size(); i++){
         if (vc_tuples_impacted[i]==1){
 
-            USetDualSpace USDS;
             listMapDualSpace[i].clear();
-            build_pairs(USDS, listMapDualSpace[i], donnees, tmp_topmost, d, i);
+            build_pairs(listMapDualSpace[i], donnees, tmp_topmost, d, i);
         }
     }
 
     for (int i=id_tuples_to_delete.size()-1;i>=0; i-- ) {
         donnees.erase(donnees.begin()+id_tuples_to_delete[i]);
-        listUSetDualSpace.erase(listUSetDualSpace.begin()+id_tuples_to_delete[i]);
         listMapDualSpace.erase(listMapDualSpace.begin()+id_tuples_to_delete[i]);
     }
 }
@@ -498,7 +517,7 @@ void BatchDeleteSetOfTuples(TableTuple& donnees, TableTuple& topmost, vector<int
 
 
 
-void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Space d, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace){
+void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Space d, vector<mapDualSpace> &listMapDualSpace){
 
     int n=donnees.size();
     std::vector<int> notTopmostAnymore;
@@ -582,7 +601,6 @@ void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Sp
     mDS.swap(tmp_mDS);
 
     donnees.push_back(tuple[0]);
-    listUSetDualSpace.push_back(usDS);
     listMapDualSpace.push_back(mDS);
 
     // cout << "usds"<< usDS.size()<<endl;
@@ -620,7 +638,6 @@ void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Sp
                     it++;
                 }
                 if (!inclus) {   
-                    listUSetDualSpace[i].insert(ds);
                     listMapDualSpace[i].insert(pair<DualSpace, int>(ds, 1));
                 }    
             }
@@ -639,7 +656,7 @@ void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Sp
 
 
 
-void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTuple &topmost, Space d, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace){
+void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTuple &topmost, Space d, vector<mapDualSpace> &listMapDualSpace){
 
     int n=donnees.size();
 
@@ -725,7 +742,6 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
             }
             if (!inclus) {   
                 listMapDualSpace[i].insert(pair<DualSpace, int>(it2->first, it2->second));
-                listUSetDualSpace[i].insert(it2->first);
                 maListe.push_back(it2->first);
             } 
 
@@ -743,9 +759,8 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
     }
 
 
-
-    listUSetDualSpace.resize(n+new_tuples.size());
     listMapDualSpace.resize(n+new_tuples.size());
+    donnees.resize(n+new_tuples.size());
     #pragma omp parallel for num_threads(NB_THREADS) schedule(dynamic)
     for (int i=0; i < new_tuples.size();i++){
         USetDualSpace usDS;
@@ -817,8 +832,7 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
             tmp_mDS[*it_usDS_local]=listMapDualSpace[i+n][*it_usDS_local];
         }
         listMapDualSpace[i+n].swap(tmp_mDS);
-        listUSetDualSpace[i+n]=usDS;
-        donnees.push_back(new_tuples[i]);
+        donnees[i+n]=new_tuples[i];
     }
 
 }
@@ -834,7 +848,7 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
 
 
 
-void multiple_deletion_option(string dataName, TableTuple& donnees, TableTuple& topmost, std::vector<int> notInTopmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace,Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0, values_map& topmost_map){
+void multiple_deletion_option(string dataName, TableTuple& donnees, TableTuple& topmost, std::vector<int> notInTopmost, vector<mapDualSpace> &listMapDualSpace,Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0, values_map& topmost_map){
 
     int n =donnees.size();
 
@@ -859,14 +873,14 @@ void multiple_deletion_option(string dataName, TableTuple& donnees, TableTuple& 
     sort(ids_to_delete.begin(),ids_to_delete.end());
 
     double timeToPerform=debut();
-    BatchDeleteSetOfTuples(donnees, topmost, ids_to_delete ,listUSetDualSpace, listMapDualSpace, d);
+    BatchDeleteSetOfTuples(donnees, topmost, ids_to_delete, listMapDualSpace, d);
     timeToPerform=duree(timeToPerform);
 
     cerr <<endl<<"BatchDeleteSetOfTuples, size: " << size << ", time: "<< timeToPerform<<std::endl;
 
 }
 
-void deletion_option(TableTuple& donnees, TableTuple& topmost, std::vector<int> notInTopmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){
+void deletion_option(TableTuple& donnees, TableTuple& topmost, std::vector<int> notInTopmost, vector<mapDualSpace> &listMapDualSpace, Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){
 
     int id_tuple_to_delete;
 
@@ -882,7 +896,7 @@ void deletion_option(TableTuple& donnees, TableTuple& topmost, std::vector<int> 
 
     double timeToPerform=debut();
 
-    DeleteTuple(donnees, topmost, id_tuple_to_delete, listUSetDualSpace, listMapDualSpace, d, notInTopmost);
+    DeleteTuple(donnees, topmost, id_tuple_to_delete, listMapDualSpace, d, notInTopmost);
 
     timeToPerform=duree(timeToPerform);
 
@@ -896,7 +910,7 @@ void deletion_option(TableTuple& donnees, TableTuple& topmost, std::vector<int> 
 
 
 
-void multiple_insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTuple& topmost, vector<USetDualSpace> &listUSetDualSpace, std::vector<mapDualSpace> &listMapDualSpace, Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){  
+void multiple_insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTuple& topmost, std::vector<mapDualSpace> &listMapDualSpace, Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){  
 
     int n=donnees.size();
 
@@ -923,7 +937,7 @@ void multiple_insertion_option(string dataName,  DataType k, TableTuple& donnees
 
     double timeToPerform=debut();
 
-    BatchInsertSetOfTuples(new_tuples, donnees, topmost, d, listUSetDualSpace, listMapDualSpace);
+    BatchInsertSetOfTuples(new_tuples, donnees, topmost, d, listMapDualSpace);
 
     timeToPerform=duree(timeToPerform);
 
@@ -931,7 +945,7 @@ void multiple_insertion_option(string dataName,  DataType k, TableTuple& donnees
 
 }
 
-void insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTuple& topmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace,Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){
+void insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTuple& topmost, vector<mapDualSpace> &listMapDualSpace,Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){
 
     int n = donnees.size();
 
@@ -955,7 +969,7 @@ void insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTu
 
     double timeToPerform=debut();
 
-    InsertTuple(new_tuple, donnees, topmost, d, listUSetDualSpace, listMapDualSpace);
+    InsertTuple(new_tuple, donnees, topmost, d, listMapDualSpace);
 
     timeToPerform=duree(timeToPerform);
 

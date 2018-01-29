@@ -62,19 +62,6 @@ inline DualSpace domDualSubspace_1(const Point &t1, const Point &t2, const Space
     return sortie;
 }
 
-void visualisation_total_pairs(TableTuple& donnees, Space d){
-
-    cout <<"*****visualisation_total_pairs*****"<<endl;
-    for(int i=0; i<donnees.size(); i++){
-        cout <<"t"<<i<<": ";
-        for(int j=0; j<donnees.size(); j++){
-            DualSpace ds = domDualSubspace_1(donnees[j], donnees[i], d);
-            cout << ds.dom<<" "<<ds.equ<<"; ";
-        }
-        cout <<endl;
-    }
-
-}
 
 void insertDualSpaceToUSet(DualSpace sp, const Space &d, USetDualSpace &uSetDualSpace, Space &all, Space &maxDom, Space &sizeMaxDom, bool &sortie){
 //retourne true si le tuple est completement dominé (ne plus le comparer à d'autres tuples)
@@ -98,7 +85,7 @@ void insertDualSpaceToUSet(DualSpace sp, const Space &d, USetDualSpace &uSetDual
 
 
 
-// remplit une structure ou l element de base est des espaces 
+
 long creationStructureNSC(NegSkyStrAux &structure, map<DataType,DataType> &newIndexes, map<DataType,DataType> &prvIndexes, vector<USetDualSpace> &listUSetDualSpace, Space d){
     Space all=(1<<d)-1;
     long structSize=0;
@@ -161,28 +148,6 @@ void choixPivot(TableTuple &topmost, Space d){
 }
 
 
-void negativequery(vector<USetDualSpace> matrix ){
-
-    // to respond to negative query, i need the subspace and matrix
-    Space querySubSpace = 14121;
-    int responseSize=0;
-    bool covered;
-    for (int i = 0; i < matrix.size(); i++){
-        covered=false;
-        // check if querySubSpace is covered for each tuple
-        for (auto it=matrix[i].begin();it!=matrix[i].end() && covered==false;++it){ // on boucle sur tous les paris (X|Y) de ce tuple
-            Space spaceXY=it->dom+it->equ;
-
-            if (estInclusDans(querySubSpace,spaceXY)){
-                covered=true;
-            }     
-        }
-        if (covered==false){
-            responseSize++;
-        }
-    }
-    cout<<"Response size: "<<responseSize<< endl;
-}
 
 void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, TableTuple& donnees, TableTuple& topmost, Space d){
 //  Cette procédure construit à partir des données la structure de compression de skycube suivant notre idéologie
@@ -196,13 +161,10 @@ void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, TableTuple& do
     triScore(topmost, d);
     Space all=(1<<d)-1;
 
+    // Build a map that reduce the comparisons
 
-   // Space X,Y, delta;
-
-    //Début construction de la Map
     unordered_map<Space, TableTuple> maStructMap;
 
-    //choixPivot(topmost, d);
     Point pivot=topmost[0];
     DualSpace ds1;
     double debut=omp_get_wtime();
@@ -217,13 +179,10 @@ void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, TableTuple& do
             (it1->second).push_back(topmost[i]);
         }
     }
-    //cerr<<"la construction de la map a pris "<<omp_get_wtime()-debut<< " sa taille est de "<<maStructMap.size()<<endl;
-    //cerr<<"le topmost a une taille de "<<topmost.size()<<endl;
-    //cerr<<"je suis ici \n";
-    //Fin construction de la Map
 
 
-    //Début construction du vecteur auxiliaire
+
+
     vector<pair<Space, TableTuple>> maStructVec;
     vector<pair<Space, vector<DataType>>> maStructVec2;
 
@@ -231,12 +190,10 @@ void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, TableTuple& do
         maStructVec.push_back(pair<Space, TableTuple>(it1->first, it1->second));
     }
 
-    //Fin construction du vecteur auxiliaire
+
     sort( maStructVec.begin(),  maStructVec.end(),pet);
     for(auto i=0; i< maStructVec.size();i++) triScore(maStructVec[i].second, d);
 
-    //Space maxDom, sizeMaxDom;
-    //bool sortie;
     #pragma omp parallel for num_threads(NB_THREADS) schedule(dynamic)
     for (i=0;i<n;++i){
         bool sortie;
@@ -296,11 +253,6 @@ void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, TableTuple& do
             // }
         }
     }
-
-    // visualisation pairs
-
-    //visualisation_pairs(listUSetDualSpace);
-
 
 }
 
@@ -365,7 +317,7 @@ bool* subspaceSkyline_NSC(NegSkyStr &structure, map<DataType,DataType> &newIndex
             }
         }
     }
-    // les vrais indices résultats de la requête sont les prvIndexes[i] tels que tableSkyline[i] vaut "true" et ce pour i allant de 0 à m
+
     return tableSkyline;
 }
 
@@ -397,7 +349,7 @@ bool* subspaceSkyline_NSC_kDom(NegSkyStr &structure, map<DataType,DataType> &new
             }
         }
     }
-    // les vrais indices résultats de la requête sont les prvIndexes[i] tels que tableSkyline[i] vaut "true" et ce pour i allant de 0 à m
+
     return tableSkyline;
 }
 
@@ -423,7 +375,7 @@ void skylinequery(string dataName, TableTuple &donnees, NegSkyStr structure0, ma
 
     cin >> subspace;
 
-    //query on 1
+    //query on 1 subspace
 
     int structSize=0;
     double timeToPerform=debut();
@@ -431,7 +383,7 @@ void skylinequery(string dataName, TableTuple &donnees, NegSkyStr structure0, ma
     timeToPerform=duree(timeToPerform);
     displayResultv2(dataName, donnees.size(), d, k, "N=1", structSize, timeToPerform, NSC); 
 
-    //query on all
+    //query on all subspaces
 
     Space All=(1<<d)-1;
     structSize=0;
