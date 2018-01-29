@@ -1,4 +1,4 @@
-CFLAGS=-O3 -fopenmp -finline -std=c++11  -Wno-deprecated
+CFLAGS=-O3 -fopenmp -finline -std=c++11  
 
 main: 
 

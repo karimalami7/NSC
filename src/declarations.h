@@ -277,5 +277,24 @@ void listCouverts2(Space domSpace, Space equSpace, Space d, vector<Space> &listS
     }
 }
 
+class mendl
+{
+public:
+    explicit mendl(unsigned int i) : n(i) {}
+private:
+    unsigned int n;
+
+    template <class charT, class Traits>
+    friend basic_ostream<charT,Traits>& operator<< (
+                                         basic_ostream<charT,Traits>& os,
+                                         const mendl& w)
+    {
+        // the manipulation: insert end-of-line characters and flush
+        for (unsigned int i=0; i<w.n; i++)
+            os << '\n';
+        os.flush();
+        return os;
+    }
+};
 
 #endif // DECLARATIONS_H_INCLUDED

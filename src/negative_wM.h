@@ -172,15 +172,15 @@ void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, vector<mapDual
 
 // tuple_effect: calcul l'impact d'un tuple sur T
 
-void tuple_effect(string dataName, TableTuple& donnees, TableTuple& topmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, Space d){
+void tuple_impact(string dataName, TableTuple& donnees, TableTuple& topmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, Space d){
 
     double debut = omp_get_wtime();
 
     int n = donnees.size();
 
-    
-
-    string const nomFichier1("./experiments/tuple_effect/testmap-te-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
+    cerr<< endl<<"This operation can take a while" <<mendl(2);
+    cerr<< "Results will be printed in "<<"te-"<<dataName<<"-d-"<<std::to_string(d)<<"-n-"<<std::to_string(n)<<endl;
+    string const nomFichier1("./te-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
     ofstream monFlux1(nomFichier1.c_str());
     
     bool inclus;
@@ -231,7 +231,7 @@ void tuple_effect(string dataName, TableTuple& donnees, TableTuple& topmost, vec
 
     omp_destroy_lock(&writelock);
 
-    cout << "time_tuple_effect: " << omp_get_wtime() - debut << endl;
+    cerr << "*done* "<< endl;
 }
 
 
@@ -335,6 +335,7 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
         //2.1 identify descendants
 
         identify_topmost_pairs( donnees, topmost, desc_in_topmost,  id_tuple_to_delete, notInTopmost,  d);
+
         new_topmost=desc_in_topmost;
         for (int i = 0; i < topmost.size(); i++){
             
@@ -342,7 +343,7 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
              new_topmost.push_back(topmost[i]);
             }
         } 
-        //cerr<<"-- desc size: "<<desc_in_topmost.size()<<endl;
+        // cerr<<"-- desc size: "<<desc_in_topmost.size()<<endl;
         
         
         // 2.2 identify the impacted tuples
@@ -379,26 +380,29 @@ void DeleteTuple(TableTuple& donnees, TableTuple& topmost, int id_tuple_to_delet
 
 
 
-        // updating data structures of NSCwM 
+        //updating data structures of NSCwM 
 
-        // topmost.swap(new_topmost);
+        topmost.swap(new_topmost);
         
-        // vector<int> vc_ids_desc(desc_in_topmost.size()),tmp_NTM(notInTopmost.size());
-        // for (int j=0; j < desc_in_topmost.size(); j++) vc_ids_desc[j]=desc_in_topmost[j][0];
-        // sort(desc_in_topmost.begin(),desc_in_topmost.end());
-        // auto it1=std::set_difference (notInTopmost.begin(), notInTopmost.end(), vc_ids_desc.begin(), vc_ids_desc.end(),tmp_NTM.begin());
-        // tmp_NTM.resize(it1-tmp_NTM.begin());
-        // notInTopmost.swap(tmp_NTM);
+        vector<int> vc_ids_desc(desc_in_topmost.size()),tmp_NTM(notInTopmost.size());
+        for (int j=0; j < desc_in_topmost.size(); j++) vc_ids_desc[j]=desc_in_topmost[j][0];
+        sort(desc_in_topmost.begin(),desc_in_topmost.end());
+        auto it1=std::set_difference (notInTopmost.begin(), notInTopmost.end(), vc_ids_desc.begin(), vc_ids_desc.end(),tmp_NTM.begin());
+        tmp_NTM.resize(it1-tmp_NTM.begin());
+        notInTopmost.swap(tmp_NTM);
         
-        // donnees.erase(donnees.begin()+id_tuple_to_delete);
-        // listMapDualSpace.erase(listMapDualSpace.begin()+id_tuple_to_delete);
-        // listUSetDualSpace.erase(listUSetDualSpace.begin()+id_tuple_to_delete);
+        donnees.erase(donnees.begin()+id_tuple_to_delete);
+        listMapDualSpace.erase(listMapDualSpace.begin()+id_tuple_to_delete);
+        listUSetDualSpace.erase(listUSetDualSpace.begin()+id_tuple_to_delete);
     }
     else{
         // if id_tuple_to_delete is not in TM
         donnees.erase(donnees.begin()+id_tuple_to_delete);
+
         listMapDualSpace.erase(listMapDualSpace.begin()+id_tuple_to_delete);
+
         listUSetDualSpace.erase(listUSetDualSpace.begin()+id_tuple_to_delete);
+
         //notInTopmost.erase();
 
     }
@@ -475,6 +479,12 @@ void BatchDeleteSetOfTuples(TableTuple& donnees, TableTuple& topmost, vector<int
             listMapDualSpace[i].clear();
             build_pairs(USDS, listMapDualSpace[i], donnees, tmp_topmost, d, i);
         }
+    }
+
+    for (int i=id_tuples_to_delete.size()-1;i>=0; i-- ) {
+        donnees.erase(donnees.begin()+id_tuples_to_delete[i]);
+        listUSetDualSpace.erase(listUSetDualSpace.begin()+id_tuples_to_delete[i]);
+        listMapDualSpace.erase(listMapDualSpace.begin()+id_tuples_to_delete[i]);
     }
 }
 
@@ -571,6 +581,10 @@ void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Sp
     }
     mDS.swap(tmp_mDS);
 
+    donnees.push_back(tuple[0]);
+    listUSetDualSpace.push_back(usDS);
+    listMapDualSpace.push_back(mDS);
+
     // cout << "usds"<< usDS.size()<<endl;
     // cout << "mds"<< mDS.size()<<endl;
     // cout <<"NIT: "<< notTopmostAnymore.size()<<endl;
@@ -606,7 +620,7 @@ void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Sp
                     it++;
                 }
                 if (!inclus) {   
-
+                    listUSetDualSpace[i].insert(ds);
                     listMapDualSpace[i].insert(pair<DualSpace, int>(ds, 1));
                 }    
             }
@@ -620,11 +634,6 @@ void InsertTuple(TableTuple &tuple, TableTuple &donnees, TableTuple &topmost, Sp
         topmost.push_back(tuple[0]);
 
     }
-
-    donnees.push_back(tuple[0]);
-    listUSetDualSpace.resize(n+1);
-    //listUSetDualSpace[n]=usDS;
-    listMapDualSpace.push_back(mDS);
 
 }
 
@@ -664,14 +673,7 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
     int pointeur;
     for ( pointeur =0;pointeur < union_TM_2_id.size();pointeur++) if (union_TM_2_id[pointeur]>=n) break;
 
-   /* std::vector<int> topmost_new_tuples_id;
-    for (int i =0;i < topmost_new_tuples.size();i++) topmost_new_tuples_id.push_back(topmost_new_tuples[i][0]);
-    sort(topmost_new_tuples_id.begin(), topmost_new_tuples_id.end());
-    vector<int> inter_TMnew_union_TM(topmost_new_tuples_id.size());
-    auto it = set_intersection(union_TM_2_id.begin(),union_TM_2_id.end(),topmost_new_tuples_id.begin(), topmost_new_tuples_id.end(),inter_TMnew_union_TM.begin());
-    inter_TMnew_union_TM.resize(it-inter_TMnew_union_TM.begin());
-    cout << "inter TM+ union TM: "<< inter_TMnew_union_TM.size()<<endl;
-*/
+
 
     #pragma omp parallel for num_threads(NB_THREADS) schedule(dynamic)
     for (int i=0; i<donnees.size(); i++){
@@ -723,6 +725,7 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
             }
             if (!inclus) {   
                 listMapDualSpace[i].insert(pair<DualSpace, int>(it2->first, it2->second));
+                listUSetDualSpace[i].insert(it2->first);
                 maListe.push_back(it2->first);
             } 
 
@@ -760,7 +763,7 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
         }
 
 
-        //  methode liste pour l'inclusion
+        //  CompressByInclusion
     
         list<DualSpace> maListe;
         for(auto it=listMapDualSpace[i+n].begin(); it!=listMapDualSpace[i+n].end(); ++it)maListe.push_back(it->first);
@@ -770,7 +773,7 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
        
         bool trouve;
         auto it=maListe.begin();
-        while (it!=maListe.end()){//pour chaque dual space, s'il est couvert alors on le supprime
+        while (it!=maListe.end()){//
             trouve=false;
             Space spdom=(*it).dom, spequ=(*it).equ;
             auto it1=it;
@@ -800,8 +803,8 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
         //usDS_local.clear();
      
         for(auto it=maListe.begin();it!=maListe.end();it++)usDS.insert(*it);
-    //  fin methode liste pour l'inclusion
 
+        // CompressionByGreedy
         // size_t t1 = usDS.size();
         // int nb=0;
         // for(auto it=usDS.begin(); it!=usDS.end() ;++it) if(it->equ!=0) {nb++; break;}
@@ -814,22 +817,11 @@ void BatchInsertSetOfTuples(TableTuple &new_tuples, TableTuple &donnees, TableTu
             tmp_mDS[*it_usDS_local]=listMapDualSpace[i+n][*it_usDS_local];
         }
         listMapDualSpace[i+n].swap(tmp_mDS);
-        //listUSetDualSpace[i+n]=usDS;
-
+        listUSetDualSpace[i+n]=usDS;
+        donnees.push_back(new_tuples[i]);
     }
 
-
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -846,314 +838,41 @@ void multiple_deletion_option(string dataName, TableTuple& donnees, TableTuple& 
 
     int n =donnees.size();
 
-    int id_to_delete;
+    int size;
 
     vector<int> ids_to_delete;
 
-    // generate ids_to_delete with same proportion of topmost and notTopmost
+    cerr <<"Please, enter the size of the subset to delete: ";
 
-    // double proportionTM = float(topmost.size())/n;
+    cin >> size;
 
-    // for (int i =0; i< int (n*(0.01*proportionTM)); i++){
-    //     //generate ids
-    //     id_to_delete=rand()%topmost.size();
+    structure0.clear();
 
-    //     ids_to_delete.push_back(topmost[id_to_delete][0]);
-               
-    // }
+    newIndexes0.clear();
 
-    // for (int i =0; i < ((n/100)- (n*(0.01*proportionTM))) ; i++){
+    prvIndexes0.clear();
 
-    //     id_to_delete=rand()%notInTopmost.size();
-
-    //     ids_to_delete.push_back(notInTopmost[id_to_delete]);
-
-    // }
-
-   // deletion NSCwM x1
-
-    cerr <<"**** Begin: Deletion NSCwM x1"<<endl;
-
-    string const nomFichier1("./experiments/deletion_NSCwM/del-x1-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
-    ofstream monFlux1(nomFichier1.c_str());
-    if (!monFlux1){
-        cerr << "Impossible d'ouvrir le fichier" << nomFichier1 << endl;
+    ids_to_delete.clear();
+    for ( int j = n; j>n-size; j-- ) {
+        ids_to_delete.push_back(j-1);
     }
+    sort(ids_to_delete.begin(),ids_to_delete.end());
 
-    for(int i = 0; i < topmost.size(); i++){
+    double timeToPerform=debut();
+    BatchDeleteSetOfTuples(donnees, topmost, ids_to_delete ,listUSetDualSpace, listMapDualSpace, d);
+    timeToPerform=duree(timeToPerform);
 
-        ids_to_delete.push_back(topmost[i][0]);
-    
-    }
+    cerr <<endl<<"BatchDeleteSetOfTuples, size: " << size << ", time: "<< timeToPerform<<std::endl;
 
-    for (int i=0; i< ids_to_delete.size(); i++){
-
-        TableTuple copy_donnees(donnees);
-
-        TableTuple copy_topmost(topmost);
-
-        std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-        std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-        std::vector<int> copy_notInTopmost(notInTopmost);
-
-        double timeToPerform=debut();
-    
-        DeleteTuple( copy_donnees, copy_topmost, ids_to_delete[i], copy_listUSetDualSpace, copy_listMapDualSpace, d, copy_notInTopmost);
-    
-        timeToPerform=duree(timeToPerform);
-
-        monFlux1 <<"id: " << ids_to_delete[i] << ", time: "<< timeToPerform<<std::endl;       
-
-    }
-
-
-
-    // Comparaison results between add_pairs and rebuild_pairs
-
-    // cerr <<"**** Begin: Comparaison between add_pairs and rebuild_pairs, by Skycube result"<<endl;
-
-    // Space N=1; //number of random queries
-    // Space All=(1<<d)-1; //number of queries in the skycube
-    // Space spAux;
-    // vector<Space> subspaceN;
-    // vector<vector<Space>> listNTabSpace(N);
-    // for (int i=1;i<=N;i++){
-    //     spAux=rand() % All + 1;
-    //     subspaceN.push_back(spAux);
-
-    //     //displaySubspace(spAux, d);cout<<endl;
-    // }
-
-    // vector<Space> subspaceAll;
-    // vector<vector<Space>> listAllTabSpace(All);
-    // for (int i=1;i<=All;i++){
-    //     subspaceAll.push_back(i);
-
-    // }
-
-    // // run delete_tuple with copies of data
-    // cerr << "query with add_pairs"<< endl;
-    // for (int i=5859; i< 5860; i++){
-
-    //     TableTuple copy_donnees(donnees);
-
-    //     TableTuple copy_topmost(topmost);
-
-    //     std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-    //     std::vector<int> copy_notInTopmost(notInTopmost);
-
-    //     double timeToPerform=debut();
-    
-    //     delete_tuple( copy_donnees, copy_topmost, i, copy_listUSetDualSpace, copy_listMapDualSpace, d, copy_notInTopmost, topmost_map);
-    
-    //     timeToPerform=duree(timeToPerform);
-
-    //     structure0.clear();
-
-    //     newIndexes0.clear();
-
-    //     prvIndexes0.clear();
-
-    //     NEG::negativeSkycube(structure0, newIndexes0, prvIndexes0, copy_listUSetDualSpace, d);
-
-    //     NEG::skylinequery_bySH_option("INDE", copy_donnees, structure0, newIndexes0, prvIndexes0, d, 100, subspaceN, subspaceAll);        
-
-    // }
-    // cerr << "query with rebuild_pairs"<< endl;
-    // for (int i=5859; i< 5860; i++){
-
-    //     TableTuple copy_donnees(donnees);
-
-    //     TableTuple copy_topmost(topmost);
-
-    //     std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-    //     std::vector<int> copy_notInTopmost(notInTopmost);
-
-    //     double timeToPerform=debut();
-    
-    //     DeleteTuple( copy_donnees, copy_topmost, i, copy_listUSetDualSpace, copy_listMapDualSpace, d, copy_notInTopmost);
-    
-    //     timeToPerform=duree(timeToPerform);
-
-    //     structure0.clear();
-
-    //     newIndexes0.clear();
-
-    //     prvIndexes0.clear();
-
-    //     NEG::negativeSkycube(structure0, newIndexes0, prvIndexes0, copy_listUSetDualSpace, d);
-
-    //     NEG::skylinequery_bySH_option("INDE", copy_donnees, structure0, newIndexes0, prvIndexes0, d, 100, subspaceN, subspaceAll);        
-
-    // }
-
-
-    //deletion NSCwM x21
-
-    // cerr <<"**** Begin: Deletion NSCwM x21"<<endl;
-
-    // string const nomFichier1("./experiments/deletion_NSCwM/del-x21-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
-    // ofstream monFlux1(nomFichier1.c_str());
-    // if (!monFlux1){
-    //     cerr << "Impossible d'ouvrir le fichier" << nomFichier1 << endl;
-    // }
-
-    
-    // int fin=90;
-    // int pas=20;
-    // int deb=90;
-
-    // for (int i=deb ; i<=fin; i=i+pas){
-
-    //     cout << "-- sup: "<< i<<endl;
-
-    //     //   sequential deletion of a subset x21
-
-    //     // cout << "/seq"<<endl;
-
-    //     TableTuple copy_donnees(donnees);
-
-    //     TableTuple copy_topmost(topmost);
-
-    //     std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-    //     std::vector<int> copy_notInTopmost(notInTopmost);
-
-    //     double timeToPerform=debut();
-
-    //     // for ( int j = n-1; j>n-i-1; j-- ) {
-
-    //     //     DeleteTuple( copy_donnees, copy_topmost, j, copy_listUSetDualSpace, copy_listMapDualSpace, d, copy_notInTopmost);
-            
-    //     // }
-
-    //     // timeToPerform=duree(timeToPerform);
-
-    //     // monFlux1 <<"s-j: " << i << ", time: "<< timeToPerform<<std::endl;
-
-    //     //grouped deletion of a subset x21
-
-    //     cout <<"/batch"<<endl;
-
-    //     ids_to_delete.clear();
-
-    //     for ( int j = n; j>n-i; j-- ) {
-    //         ids_to_delete.push_back(j-1);
-    //     }
-
-    //     sort(ids_to_delete.begin(),ids_to_delete.end());
-
-    //     copy_donnees=donnees;
-
-    //     copy_topmost=topmost;
-
-    //     copy_listUSetDualSpace=listUSetDualSpace;
-
-    //     copy_listMapDualSpace=listMapDualSpace;
-
-    //     timeToPerform=debut();
-
-    //     BatchDeleteSetOfTuples(copy_donnees, copy_topmost, ids_to_delete ,copy_listUSetDualSpace, copy_listMapDualSpace, d);
-
-    //     timeToPerform=duree(timeToPerform);
-
-    //     monFlux1 <<"b-j: " << i << ", time: "<< timeToPerform<<std::endl;
-
-    // }
-
-        //deletion NSCwM x22
-
-    // cerr <<"**** Begin: Deletion NSCwM x22"<<endl;
-
-    // string const nomFichier1("./experiments/deletion_NSCwM/del-x22-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
-    // ofstream monFlux1(nomFichier1.c_str());
-    // if (!monFlux1){
-    //     cerr << "Impossible d'ouvrir le fichier" << nomFichier1 << endl;
-    // }
-
-    
-    // int fin=100000;
-    // int pas=10;
-    // int deb=1000;
-
-    // for (int i=deb ; i<=fin; i=i+pas){
-
-    //     // cout << "-- sup: "<< i<<endl;
-
-    //     // //   sequential deletion of a subset x21
-
-    //     // cout << "/seq"<<endl;
-
-    //     // TableTuple copy_donnees(donnees);
-
-    //     // TableTuple copy_topmost(topmost);
-
-    //     // std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     // std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-    //     // std::vector<int> copy_notInTopmost(notInTopmost);
-
-    //     // double timeToPerform=debut();
-
-    //     // for ( int j = n-1; j>n-i-1; j-- ) {
-
-    //     //     DeleteTuple( copy_donnees, copy_topmost, j, copy_listUSetDualSpace, copy_listMapDualSpace, d, copy_notInTopmost);
-            
-    //     // }
-
-    //     // timeToPerform=duree(timeToPerform);
-
-    //     // monFlux1 <<"s-j: " << i << ", time: "<< timeToPerform<<std::endl;
-
-    //     //grouped deletion of a subset x22
-
-    //     cout <<"/batch"<<endl;
-
-    //     ids_to_delete.clear();
-
-    //     for ( int j = n; j>n-i; j-- ) {
-    //         ids_to_delete.push_back(j-1);
-    //     }
-
-    //     sort(ids_to_delete.begin(),ids_to_delete.end());
-
-    //     TableTuple copy_donnees(donnees);
-
-    //     TableTuple copy_topmost(topmost);
-
-    //     std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-    //     double timeToPerform=debut();
-
-    //     BatchDeleteSetOfTuples(copy_donnees, copy_topmost, ids_to_delete ,copy_listUSetDualSpace, copy_listMapDualSpace, d);
-
-    //     timeToPerform=duree(timeToPerform);
-
-    //     monFlux1 <<"b-j: " << i << ", time: "<< timeToPerform<<std::endl;
-
-    // }
 }
 
 void deletion_option(TableTuple& donnees, TableTuple& topmost, std::vector<int> notInTopmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace, Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){
 
     int id_tuple_to_delete;
 
-   // cerr << "enter the id of the tuple to delete: ";
+    cerr << "Please, enter the id of the tuple to delete: ";
 
-    //cin >> id_tuple_to_delete;
+    cin >> id_tuple_to_delete;
 
     structure0.clear();
 
@@ -1162,22 +881,12 @@ void deletion_option(TableTuple& donnees, TableTuple& topmost, std::vector<int> 
     prvIndexes0.clear();
 
     double timeToPerform=debut();
-    
-    //tuple_effect(donnees, id_tuple_to_delete, listUSetDualSpace, d);
 
-    //delete_tuple(donnees, topmost, 32, listUSetDualSpace, listMapDualSpace, d, notInTopmost);
+    DeleteTuple(donnees, topmost, id_tuple_to_delete, listUSetDualSpace, listMapDualSpace, d, notInTopmost);
 
     timeToPerform=duree(timeToPerform);
 
-    std::cerr << "delete tuple, time: "<< timeToPerform<<std::endl; 
-
-    timeToPerform=debut();
-
-    NEG::negativeSkycube(structure0, newIndexes0, prvIndexes0, listUSetDualSpace, d);
-
-    timeToPerform=duree(timeToPerform);
-
-    std::cerr << "fin SH, time: "<< timeToPerform<<std::endl;
+    std::cerr << "DeleteTuple, time: "<< timeToPerform<<std::endl; 
 
 }
 
@@ -1190,364 +899,45 @@ void deletion_option(TableTuple& donnees, TableTuple& topmost, std::vector<int> 
 void multiple_insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTuple& topmost, vector<USetDualSpace> &listUSetDualSpace, std::vector<mapDualSpace> &listMapDualSpace, Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){  
 
     int n=donnees.size();
+
+    int size;
+
+    TableTuple new_tuples;
+
+    cerr <<"Please, enter the size of the subset to insert: ";
+
+    cin >> size;
     
-    cerr <<"**** Begin: Multiple Insertion NSCwM"<<endl;
+    // generate new tuples
+    loadData(dataName, "", size, d, k, new_tuples);
 
-    // // x11
+    for (int k=0 ; k< new_tuples.size();k++){
+        new_tuples[k][0]=n+k;
+    }
 
-    // string const nomFichier1("./experiments/insertion_NSCwM/ins-x11-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
-    // ofstream monFlux1(nomFichier1.c_str());
-    // if (!monFlux1){
-    //     cerr << "Impossible d'ouvrir le fichier" << nomFichier1 << endl;
-    // }
+    structure0.clear();
 
-    // cerr <<"-x11"<<endl;
+    newIndexes0.clear();
 
-    // int fin=110;
+    prvIndexes0.clear();
 
-    // int pas=20;
+    double timeToPerform=debut();
 
-    // int deb=10;
-    
-    // for (int i=deb;i<=fin;i=i+pas){
-        
-    //     cerr <<"= insertion: "<<i<<endl;
+    BatchInsertSetOfTuples(new_tuples, donnees, topmost, d, listUSetDualSpace, listMapDualSpace);
 
-    //     TableTuple new_tuples;
-        
-    //     // generate new tuples
-    //     loadData(dataName, "", i, d, k, new_tuples);
+    timeToPerform=duree(timeToPerform);
 
-    //     for (int k=0 ; k< new_tuples.size();k++){
-    //         new_tuples[k][0]=n+k;
-    //     }
-
-    //     // sequential
-
-    //     cerr <<"/sequential"<<endl;
-
-    //     TableTuple copy_donnees(donnees);
-
-    //     TableTuple copy_topmost(topmost);
-
-    //     std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-    //     double timeToPerform=debut();
-
-    //     for (int j = 0; j< i;j++){
-
-    //         TableTuple new_tuple;
-    //         new_tuple.push_back(new_tuples[j]);
-    //         new_tuple[0][0]=n+j;
-    //         InsertTuple(new_tuple, copy_donnees, copy_topmost, d, copy_listUSetDualSpace, copy_listMapDualSpace);
-    //     }
-
-    //     timeToPerform=duree(timeToPerform);
-
-    //     monFlux1 << "s: "<< i<<", time: "<< timeToPerform<<std::endl;
-
-    //     // batch
-
-    //     cerr <<"/batch"<<endl;
-
-    //     copy_donnees=donnees;   
-
-    //     copy_topmost=topmost;
-
-    //     copy_listUSetDualSpace=listUSetDualSpace;
-
-    //     copy_listMapDualSpace=listMapDualSpace;
-        
-    //     timeToPerform=debut();
-
-    //     BatchInsertSetOfTuples(new_tuples, copy_donnees, copy_topmost, d, copy_listUSetDualSpace, copy_listMapDualSpace);
-
-    //     timeToPerform=duree(timeToPerform);
-    
-    //     monFlux1 << "b: "<< i<<", time: "<< timeToPerform<<std::endl; 
-
-    //     // rebuild
-
-    //     cerr <<"/rebuild"<<endl;
-
-    //     copy_donnees=donnees;  
-
-    //     for (int j = 0; j< i;j++){            
-    //         new_tuples[j][0]=n+j;
-    //         copy_donnees.push_back(new_tuples[j]);
-    //     } 
-
-    //     copy_topmost.clear();
-
-    //     copy_listUSetDualSpace.clear();
-    //     copy_listUSetDualSpace.resize(n+i);
-
-    //     copy_listMapDualSpace.clear();
-    //     copy_listMapDualSpace.resize(n+i);
-
-    //     values_map topmost_map(d);
-
-    //     timeToPerform=debut();
-
-    //     NEG_wM::negativeSkycubeAux(copy_listUSetDualSpace, copy_listMapDualSpace, copy_donnees, copy_topmost, topmost_map, d);
-
-    //     timeToPerform=duree(timeToPerform);
-
-    //     monFlux1 << "r: "<< i<<", time: "<< timeToPerform<<std::endl;
-    // }
-
-    // // x12
-
-    // string const nomFichier1("./experiments/insertion_NSCwM/ins-x12-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
-    // ofstream monFlux1(nomFichier1.c_str());
-    // if (!monFlux1){
-    //     cerr << "Impossible d'ouvrir le fichier" << nomFichier1 << endl;
-    // }
-
-    // cerr <<"-x12"<<endl;
-
-    // int fin=100000;
-
-    // int pas=10;
-
-    // int deb=1000;
-    
-    // for (int i=deb;i<=fin;i=i*pas){
-        
-    //     cerr <<"= insertion: "<<i<<endl;
-
-    //     TableTuple new_tuples;
-        
-    //     // generate new tuples
-    //     loadData(dataName, "", i, d, k, new_tuples);
-
-    //     for (int k=0 ; k< new_tuples.size();k++){
-    //         new_tuples[k][0]=n+k;
-    //     }
-
-    //     // batch
-
-    //     cerr <<"/batch"<<endl;
-
-    //     TableTuple copy_donnees(donnees);
-
-    //     TableTuple copy_topmost(topmost);
-
-    //     std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-        
-    //     double timeToPerform=debut();
-
-    //     BatchInsertSetOfTuples(new_tuples, copy_donnees, copy_topmost, d, copy_listUSetDualSpace, copy_listMapDualSpace);
-
-    //     timeToPerform=duree(timeToPerform);
-    
-    //     monFlux1 << "b: "<< i<<", time: "<< timeToPerform<<std::endl; 
-
-    //     // rebuild
-
-    //     cerr <<"/rebuild"<<endl;
-
-    //     copy_donnees=donnees;  
-
-    //     for (int j = 0; j< i;j++){            
-    //         new_tuples[j][0]=n+j;
-    //         copy_donnees.push_back(new_tuples[j]);
-    //     } 
-
-    //     copy_topmost.clear();
-
-    //     copy_listUSetDualSpace.clear();
-    //     copy_listUSetDualSpace.resize(n+i);
-
-    //     copy_listMapDualSpace.clear();
-    //     copy_listMapDualSpace.resize(n+i);
-
-    //     values_map topmost_map(d);
-
-    //     timeToPerform=debut();
-
-    //     NEG_wM::negativeSkycubeAux(copy_listUSetDualSpace, copy_listMapDualSpace, copy_donnees, copy_topmost, topmost_map, d);
-
-    //     timeToPerform=duree(timeToPerform);
-
-    //     monFlux1 << "r: "<< i<<", time: "<< timeToPerform<<std::endl;
-    // }
-
-    // // x3
-
-    // string const nomFichier1("./experiments/insertion_NSCwM/ins-x3-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
-    // ofstream monFlux1(nomFichier1.c_str());
-    // if (!monFlux1){
-    //     cerr << "Impossible d'ouvrir le fichier" << nomFichier1 << endl;
-    // }
-
-    // cerr <<"-x3"<<endl;
-
-    // int NSC_size=0;
-    // for (int i=0; i<listMapDualSpace.size();i++) NSC_size+=listMapDualSpace[i].size();
-    // monFlux1 << "begin, NSC_size: "<< NSC_size<<std::endl;    
-
-    // int fin=1000;
-
-    // int pas=10;
-
-    // int deb=10;
-
-    // TableTuple new_tuples_gen;
-    
-    // // generate new tuples
-
-    // loadData(dataName, "", fin, d, k, new_tuples_gen);
-    
-    // for (int i=deb;i<=fin;i=i*pas){
-        
-    //     cerr <<"= insertion: "<<i<<endl;
-
-    //     TableTuple new_tuples;
-
-    //     for (int j=0; j<i; j++) new_tuples.push_back(new_tuples_gen[j]);
-
-    //     for (int k=0 ; k< new_tuples.size();k++){
-    //         new_tuples[k][0]=n+k;
-    //     }
-
-    //     // sequential
-
-    //     cerr <<"/sequential"<<endl;
-
-    //     TableTuple copy_donnees(donnees);
-
-    //     TableTuple copy_topmost(topmost);
-
-    //     std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-
-    //     std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);
-
-    //     double timeToPerform=debut();
-
-    //     add_multiple_tuple_nothing(new_tuples, copy_donnees, copy_topmost, d, copy_listUSetDualSpace, copy_listMapDualSpace);
-
-    //     timeToPerform=duree(timeToPerform);
-        
-    //     NSC_size=0;
-    //     for (int i=0; i<copy_listMapDualSpace.size();i++) NSC_size+=copy_listMapDualSpace[i].size();
-
-    //     monFlux1 << "s: "<< i<<", NSC_size: "<< NSC_size<<std::endl;
-    //     monFlux1 << "s: "<< i<<", time: "<< timeToPerform<<std::endl;
-
-    //     // batch with inclusion
-
-    //     cerr <<"/batch i"<<endl;
-
-    //     copy_donnees=donnees;   
-
-    //     copy_topmost=topmost;
-
-    //     copy_listUSetDualSpace=listUSetDualSpace;
-
-    //     copy_listMapDualSpace=listMapDualSpace;
-        
-    //     timeToPerform=debut();
-
-    //     add_multiple_tuple_inclusion(new_tuples, copy_donnees, copy_topmost, d, copy_listUSetDualSpace, copy_listMapDualSpace);
-
-    //     timeToPerform=duree(timeToPerform);
-
-    //     NSC_size=0;
-    //     for (int i=0; i<copy_listMapDualSpace.size();i++) NSC_size+=copy_listMapDualSpace[i].size();
-    
-    //     monFlux1 << "bi: "<< i<<", NSC_size: "<< NSC_size<<std::endl; 
-    //     monFlux1 << "bi: "<< i<<", time: "<< timeToPerform<<std::endl;
-
-    //     // batch with fg
-
-    //     cerr <<"/batch fg"<<endl;
-
-    //     copy_donnees=donnees;   
-
-    //     copy_topmost=topmost;
-
-    //     copy_listUSetDualSpace=listUSetDualSpace;
-
-    //     copy_listMapDualSpace=listMapDualSpace;
-        
-    //     timeToPerform=debut();
-
-    //     BatchInsertSetOfTuples(new_tuples, copy_donnees, copy_topmost, d, copy_listUSetDualSpace, copy_listMapDualSpace);
-
-    //     timeToPerform=duree(timeToPerform);
-
-    //     NSC_size=0;
-    //     for (int i=0; i<copy_listMapDualSpace.size();i++) NSC_size+=copy_listMapDualSpace[i].size();
-    
-    //     monFlux1 << "bfg: "<< i<<", NSC_size: "<< NSC_size<<std::endl;
-    //     monFlux1 << "bfg: "<< i<<", time: "<< timeToPerform<<std::endl; 
-
-    // fin x3
-
-   // }
+    cerr << "BatchInsertSetOfTuples, size: "<< size<<", time: "<< timeToPerform<<std::endl;    
 
 }
 
 void insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTuple& topmost, vector<USetDualSpace> &listUSetDualSpace, vector<mapDualSpace> &listMapDualSpace,Space d, NegSkyStr &structure0, map<DataType,DataType> &newIndexes0, map<DataType,DataType> &prvIndexes0){
 
-    cerr <<"**** Begin: Simple insertion NSCwM"<<endl;
-
     int n = donnees.size();
 
     TableTuple new_tuples;
 
-    loadData(dataName, "", 2, d, k, new_tuples);
-
-    //int id_new_tuple;
-
-    //int tuple[15]={1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000};
-
-    //cout << "chooose id of the new tuple: ";
-
-    //cin >> id_new_tuple;
-
-    //new_tuple[0]=tuple; // on lui donne un identifiant inexistant auparavant
-
-    // new_tuple[0][0]=donnees.size();
-
-    // structure0.clear();
-
-    // newIndexes0.clear();
-
-    // prvIndexes0.clear();
-
-    // double timeToPerform=debut();
-
-    // InsertTuple(new_tuple, donnees, topmost, d, listUSetDualSpace, listMapDualSpace);
-
-    // timeToPerform=duree(timeToPerform);
-
-    // std::cout << "Adding tuple, time: "<< timeToPerform<<std::endl;
-
-    // timeToPerform=debut();
-
-    // NEG::negativeSkycube(structure0, newIndexes0, prvIndexes0, listUSetDualSpace, d);
-
-    // timeToPerform=duree(timeToPerform);
-
-    // std::cout << "fin SH, time: "<< timeToPerform<<std::endl; 
-
-    //matrixQuery(pairMAP);
-
-    //x2
-
-    string const nomFichier1("./experiments/insertion_NSCwM/ins-x2-"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
-    ofstream monFlux1(nomFichier1.c_str());
-    if (!monFlux1){
-        cerr << "Impossible d'ouvrir le fichier" << nomFichier1 << endl;
-    }
-
-    cerr <<"-x2"<<endl;
+    loadData(dataName, "", 1, d, k, new_tuples);
 
     for (int i=0; i<new_tuples.size(); i++){
 
@@ -1557,44 +947,19 @@ void insertion_option(string dataName,  DataType k, TableTuple& donnees, TableTu
 
     new_tuple[0][0]=donnees.size();
 
-    // with add tuple
+    structure0.clear();
 
-    cerr <<"/InsertTuple"<<endl;
+    newIndexes0.clear();
 
-    TableTuple copy_donnees(donnees);
-    TableTuple copy_topmost(topmost);
-    std::vector<USetDualSpace> copy_listUSetDualSpace(listUSetDualSpace);
-    std::vector<mapDualSpace> copy_listMapDualSpace(listMapDualSpace);    
+    prvIndexes0.clear();
 
     double timeToPerform=debut();
 
-    InsertTuple(new_tuple, copy_donnees, copy_topmost, d, copy_listUSetDualSpace, copy_listMapDualSpace);
+    InsertTuple(new_tuple, donnees, topmost, d, listUSetDualSpace, listMapDualSpace);
 
     timeToPerform=duree(timeToPerform);
 
-    monFlux1 << "a: "<<", time: "<< timeToPerform<<std::endl;
-
-    // with rebuild
-
-    cerr <<"/rebuild"<<endl;
-
-    copy_donnees=donnees;  
-    new_tuple[0][0]=n;
-    copy_donnees.push_back(new_tuple[0]);
-    copy_topmost.clear();
-    copy_listUSetDualSpace.clear();
-    copy_listUSetDualSpace.resize(n+1);
-    copy_listMapDualSpace.clear();
-    copy_listMapDualSpace.resize(n+1);
-    values_map topmost_map(d);
-    
-    timeToPerform=debut();
-    
-    NEG_wM::negativeSkycubeAux(copy_listUSetDualSpace, copy_listMapDualSpace, copy_donnees, copy_topmost, topmost_map, d);
-    
-    timeToPerform=duree(timeToPerform);
-    
-    monFlux1 << "r: "<<", time: "<< timeToPerform<<std::endl;
+    cerr << "InsertTuple, time: "<< timeToPerform<<std::endl;
 
     }
 }

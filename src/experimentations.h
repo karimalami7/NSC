@@ -7,6 +7,7 @@ void displayResult(string dataName, DataType n, Space d, DataType k, string step
     cout<<dataName<<" "<<n<<" "<<d<<" "<<k<<" "<<methodNamesDisplayed[method]<<" "<<NB_THREADS<<" "<<step<<" "<<structSize<<" "<<timeToPerform<<endl;
 }
 
+
 void experimentation_NAIF(string dataName, TableTuple &donnees, Space d, DataType k, vector<vector<Space>> &listNTabSpace, vector<vector<Space>> &listAllTabSpace){
     double timeToPerform;
     long structSize=0;
@@ -227,44 +228,64 @@ void experimentation_NSCwM(string dataName, TableTuple &donnees, Space d, DataTy
 
     //the application is interactive by the menu below 
 
-    bool interactive_menu=false;
+    cerr<<mendl(3)<<"*********************NB*********************"<<mendl(2);
+    cerr<<"*****Some options are not handled by this version and could lead to a misbehavior of the software. So, please: "<<endl;
+    cerr<<"1/ Experiment Deletions and Insertions separately."<<endl;
+    cerr<<"2/ Delete tuples in descending order of ids."<<endl;
+
+    bool interactive_menu=true;
 
     while (interactive_menu){
-
         cerr << endl<< endl<< "****************choose an option****************"<< endl;
 
         cerr << "1 -> Deletion of one tuple"<< endl;
 
-        cerr << "2 -> Insertion" << endl;
+        cerr << "2 -> Insertion of one tuple" << endl;
 
-        cerr << "3 -> Query" << endl;
+        cerr << "3 -> Query on a subspace and skycube" << endl;
 
-        cerr << "4 -> Deletion multiple tuples" << endl;
+        cerr << "4 -> Deletion of multiple tuples" << endl;
 
-        cerr << "5 -> Insertion multiple tuples" << endl;
+        cerr << "5 -> Insertion of multiple tuples" << endl;
 
-        cerr << "6 -> Tuple effect" << endl;
+        cerr << "6 -> Tuple impact" << endl;
 
         cerr << "other -> out" << endl;
 
         int choix;
-        cerr <<"cin choice: ";
+        cerr <<endl<<"Please, enter your choice: ";
         cin >> choix;
         cerr <<endl;
 
         switch(choix){
 
-        case 1: cerr <<"++++++++ Deletion"<<endl;NEG_wM::deletion_option(donnees, topmost, notInTopmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes);break;
+        case 1: cerr <<"++++++++ Deletion of one tuple"<<endl;
+                NEG_wM::deletion_option(donnees, topmost, notInTopmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes);
+                NEG::negativeSkycube(structureNSC, newIndexes, prvIndexes, listUSetDualSpace, d);
+                break;
 
-        case 2: cerr <<"++++++++ Insertion"<<endl;NEG_wM::insertion_option(dataName, k, donnees, topmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes);break;
+        case 2: cerr <<"++++++++ Insertion of one tuple"<<endl;
+                NEG_wM::insertion_option(dataName, k, donnees, topmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes);
+                NEG::negativeSkycube(structureNSC, newIndexes, prvIndexes, listUSetDualSpace, d);
+                break;
 
-        case 3: cerr <<"++++++++ Query"<<endl;NEG::skylinequery_bySH_option(dataName, donnees, structureNSC, newIndexes, prvIndexes, d, k, subspaceN, subspaceAll);break;
+        case 3: cerr <<"++++++++ Query on a subspace and skycube"<<endl;
+                NEG::skylinequery(dataName, donnees, structureNSC, newIndexes, prvIndexes, d, k, subspaceN, subspaceAll);
+                break;
 
-        case 4: cerr <<"++++++++ Multiple Deletion"<<endl;NEG_wM::multiple_deletion_option(dataName ,donnees, topmost, notInTopmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes, topmost_map);interactive_menu=false;break;
+        case 4: cerr <<"++++++++ Deletion of multiple tuples"<<endl;
+                NEG_wM::multiple_deletion_option(dataName ,donnees, topmost, notInTopmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes, topmost_map);
+                NEG::negativeSkycube(structureNSC, newIndexes, prvIndexes, listUSetDualSpace, d);
+                break;
 
-        case 5: cerr <<"++++++++ Multiple Insertion"<<endl;NEG_wM::multiple_insertion_option(dataName, k, donnees, topmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes);interactive_menu=false;break;
+        case 5: cerr <<"++++++++ Insertion of multiple tuples"<<endl;
+                NEG_wM::multiple_insertion_option(dataName, k, donnees, topmost, listUSetDualSpace, listMapDualSpace, d, structureNSC, newIndexes, prvIndexes);
+                NEG::negativeSkycube(structureNSC, newIndexes, prvIndexes, listUSetDualSpace, d);
+                break;
 
-        case 6: cerr <<"++++++++ Tuple effect"<<endl;NEG_wM::tuple_effect(dataName, donnees, topmost, listUSetDualSpace, listMapDualSpace, d);interactive_menu=false;break;        
+        case 6: cerr <<"++++++++ Tuple impact"<<endl;
+                NEG_wM::tuple_impact(dataName, donnees, topmost, listUSetDualSpace, listMapDualSpace, d);
+                break;        
 
         default: exit(0);break;
 
@@ -344,7 +365,7 @@ void experimentSkycube(string dataName, string path, DataType k, DataType n, Spa
     }
 
     loadData(dataName, path, n, d, k, donnees);
-    cerr << "Query subspace: " << subspaceN[0]<<endl<<endl;
+    cerr << "Random query subspace: " << subspaceN[0]<<endl<<endl;
     //Decommenter la ligne ci-dessous pour afficher les données et ne pas exécuter les différentes méthodes
     //afficheDonnees(donnees, d);for (i=0;i<n;i++) delete[] donnees[i];return;
 

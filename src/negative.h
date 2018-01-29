@@ -415,13 +415,13 @@ void displayResultv2(string dataName, DataType n, Space d, DataType k, string st
     cout<<dataName<<" "<<n<<" "<<d<<" "<<k<<" "<<methodNamesDisplayed[method]<<" "<<NB_THREADS<<" "<<step<<" "<<structSize<<" "<<timeToPerform<<endl;
 }
 
-void skylinequery_bySH_option(string dataName, TableTuple &donnees, NegSkyStr structure0, map<DataType, DataType> newIndexes0, map<DataType, DataType> prvIndexes0, Space d, DataType k,vector<Space> &subspaceN, vector<Space> &subspaceAll){
+void skylinequery(string dataName, TableTuple &donnees, NegSkyStr structure0, map<DataType, DataType> newIndexes0, map<DataType, DataType> prvIndexes0, Space d, DataType k,vector<Space> &subspaceN, vector<Space> &subspaceAll){
 
-    Space subspace=14121;
+    Space subspace;
 
-    //cerr << "Choose a subspace for the skyline query: ";
+    cerr << "Choose a subspace for the skyline query: ";
 
-    //cin >> subspace;
+    cin >> subspace;
 
     //query on 1
 
