@@ -50,7 +50,28 @@ Arguments:
 
 5. Number of parallel threads.
 
-6. List of methods to be run: (NSC, NSCwM, TREE, NAIF, CSC).
+6. List of methods to be run:
+
+| Methods  | Arguments  |
+|---|---|
+| NSC  |  NSC |
+| NSC with counters  |  NSCwM |
+| BSkyTree | TREE|
+| Naive method  | NAIF |
+| Compressed SkyCube | CSC |
 
 Outputs are (i) building time (for methods that build a structure), (ii) skyline query execution time for one random query, (iii) Skycube query execution time.
+
+## Maintenance of NSC
+
+Experiment maintenace of NSC through NSCwM argument.
+
+The interactive menu allows to: 
+
+1. Delete one tuple from the initial data.
+2. Insert one tuple into the initial data.
+3. Query NSC to retrieve the skyline of a subspace or the whole skycube.
+4. Delete multiple tuples from the initial data.
+5. Insert multiple tuples into the initial data.
+6. Compute impact of every tuple in the **Topmost**.
 
