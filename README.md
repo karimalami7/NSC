@@ -26,7 +26,7 @@ This repository includes NSC sources as well as state of the art methods to buil
 
 To begin, please clone this repository. This software requires C++ compiler.
 
-Next, compile the source code with [Makefile](https://github.com/karimalami7/NSC/blob/master/src/makefile).
+Next, change current directory to ./src and compile the source code with [Makefile](https://github.com/karimalami7/NSC/blob/master/src/makefile).
 
 Then, identify the input dataset and methods to be run with arguments to be set in [run](https://github.com/karimalami7/NSC/blob/master/src/run.sh) file.
 
