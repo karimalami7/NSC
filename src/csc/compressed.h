@@ -1,7 +1,7 @@
 #ifndef COMPRESSED_H_INCLUDED
 #define COMPRESSED_H_INCLUDED
 
-#include "declarations.h"
+#include "../common/declarations.h"
 
 Space COMPRESSED_DIM;
 

@@ -1,7 +1,7 @@
 #ifndef KDOMSKYCUBE_H_INCLUDED
 #define KDOMSKYCUBE_H_INCLUDED
 
-#include "declarations.h"
+#include "../common/declarations.h"
 
 /*
 Space kCompare(const Point &t1, const Point &t2, const Space &d){

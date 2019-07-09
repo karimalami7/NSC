@@ -1,7 +1,7 @@
 #ifndef ALGOGLOUTON_H_INCLUDED
 #define ALGOGLOUTON_H_INCLUDED
 
-#include "declarations.h"
+#include "../common/declarations.h"
 
 void set_of_bits(int i, 	vector<int> &V){
     //on récupère les position des bits à 1 dans i qu'on met dans V

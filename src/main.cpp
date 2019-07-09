@@ -2,17 +2,17 @@
 int NB_THREADS=22;
 int K_MIN=1;
 
-#include "DataGenerator.h"
-#include "generateur.h"
-#include "generateKossmann.h"
-#include "affichage.h"
-#include "skyline.h"
-#include "bskytree.h"
-#include "compressed.h"
-#include "algoglouton.h"
-#include "negative.h"
-#include "negative_wM.h"
-#include "kdomskycube.h"
+#include "generator/DataGenerator.h"
+#include "generator/generateur.h"
+#include "generator/generateKossmann.h"
+#include "common/affichage.h"
+#include "common/skyline.h"
+#include "bskytree/bskytree.h"
+#include "csc/compressed.h"
+#include "nsc/algoglouton.h"
+#include "nsc/negative.h"
+#include "nsc/negative_wM.h"
+#include "kdominance/kdomskycube.h"
 #include "experimentations.h"
 
 

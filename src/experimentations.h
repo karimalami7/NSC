@@ -1,7 +1,7 @@
 #ifndef EXPERIMENTATIONS_H_INCLUDED
 #define EXPERIMENTATIONS_H_INCLUDED
 
-#include "declarations.h"
+#include "common//declarations.h"
 
 void displayResult(string dataName, DataType n, Space d, DataType k, string step, long structSize, double timeToPerform, int method){
     cout<<dataName<<" "<<n<<" "<<d<<" "<<k<<" "<<methodNamesDisplayed[method]<<" "<<NB_THREADS<<" "<<step<<" "<<structSize<<" "<<timeToPerform<<endl;

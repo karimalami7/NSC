@@ -1,7 +1,7 @@
 #ifndef GENERATEUR_H_INCLUDED
 #define GENERATEUR_H_INCLUDED
 
-#include "declarations.h"
+#include "../common/declarations.h"
 
 void normaliseDonnees(TableTuple &donnees, Space d, TableTuple &sortie){
 //  normalise un tableau de données
