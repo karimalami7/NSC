@@ -1,16 +1,28 @@
 # NSC: Negative SkyCube
 
-NSC is an index structure designed to speed up multi-dimensional skyline query answering. It consists of associating to a tuple, the subspaces where it is dominated. Those subspaces are encoded in a way that minimize memory consumption.
+**NSC** is an index structure designed to speed up multi-dimensional skyline query answering. It consists of associating to a tuple, the subspaces where it is dominated. Those subspaces are encoded in a way that minimize memory consumption.
 
-NSC has been presented at **CIKM 2016** conference through the paper [Computing and summarizing the negative Skycube](https://dl.acm.org/citation.cfm?doid=2983323.2983759).
+The **NSC** structure has been presented at **CIKM 2016** conference through the paper [Computing and summarizing the negative Skycube](https://dl.acm.org/citation.cfm?doid=2983323.2983759). Additionnal materials, including incremental maintenance of **NSC**, have been published in **Information Systems** through the paper [The negative skycube](https://www.sciencedirect.com/science/article/abs/pii/S0306437919304958). 
 
-Its efficiency wrt building time, memory usage and skyline query answering has been shown in that paper.
+If you consider **NSC** in your work, please cite:
+
+    @article{alami2020negative,
+      title={The negative skycube},
+      author={Alami, Karim and Hanusse, Nicolas and Kamnang-Wanko, Patrick and Maabout, Sofian},
+      journal={Information Systems},
+      volume={88},
+      pages={101443},
+      year={2020},
+      publisher={Elsevier}
+    }
+
+**NSC**'s efficiency wrt building time, memory usage and skyline query answering has been shown in that paper.
 
 Afterward we studied its incremental maintenance. 
 
 ### Repository organization
 
-This repository includes NSC sources as well as state of the art methods to build and answer skyline queries.
+This repository includes **NSC** sources as well as state of the art methods to build and answer skyline queries.
 
 * dataset/: real datasets used for experimentations
 
@@ -64,7 +76,7 @@ Outputs are (i) building time (for methods that build a structure), (ii) skyline
 
 ## Maintenance of NSC
 
-Experiment maintenace of NSC through NSCwM argument.
+Experiment maintenace of **NSC** through NSCwM argument.
 
 The interactive menu allows to: 
 
