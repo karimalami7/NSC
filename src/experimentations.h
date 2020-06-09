@@ -3,6 +3,7 @@
 
 #include "common//declarations.h"
 
+
 void displayResult(string dataName, DataType n, Space d, DataType k, string step, long structSize, double timeToPerform, int method){
     cout<<dataName<<" "<<n<<" "<<d<<" "<<k<<" "<<methodNamesDisplayed[method]<<" "<<NB_THREADS<<" "<<step<<" "<<structSize<<" "<<timeToPerform<<endl;
 }
@@ -119,7 +120,12 @@ void experimentation_NSC(string dataName, TableTuple &donnees, Space d, DataType
     DataType n=donnees.size();
     vector<USetDualSpace> listUSetDualSpace(n);
     TableTuple topmost;
-    NEG::negativeSkycubeAux(listUSetDualSpace, donnees, topmost, d);
+    if (NEG::pairs_file_exists(dataName, d,donnees.size())){
+        NEG::load_pairs(dataName, d,donnees.size(), listUSetDualSpace);
+    }
+    else{
+        NEG::negativeSkycubeAux(listUSetDualSpace, donnees, topmost, d);
+        }
     structSize=NEG::negativeSkycube(structureNSC, newIndexes, prvIndexes, listUSetDualSpace, d);
     timeToPerform=duree(timeToPerform);
     structSize2=structSize;
@@ -129,21 +135,81 @@ void experimentation_NSC(string dataName, TableTuple &donnees, Space d, DataType
     timeToPerform=debut();
     for (i=0;i<N;i++){
             
-        response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, newIndexes, prvIndexes, subspaceN[i]);
+        response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, donnees.size(), subspaceN[i]);
 
     }
     
     timeToPerform=duree(timeToPerform);
     displayResult(dataName, donnees.size(), d, k, ss.str(), response_size, timeToPerform, NSC);
-    response_size=0;
-    timeToPerform=debut();
-        for (i=0;i<All;i++){
-            response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, newIndexes, prvIndexes, subspaceAll[i]);
+    // response_size=0;
+    // timeToPerform=debut();
+    //     for (i=0;i<All;i++){
+    //         response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, donnees.size(), subspaceAll[i]);
+    //     }
+    // timeToPerform=duree(timeToPerform);
+    // displayResult(dataName, donnees.size(), d, k, "SKYCUBE", response_size, timeToPerform, NSC);
+
+    bool interactive_menu=false;
+
+    while (interactive_menu){
+        cerr << endl<< endl<< "****************choose an option****************"<< endl;
+
+        cerr << "1 -> Materialize Dataset and the structure of pairs"<< endl;
+
+        cerr << "2 -> Rank tuples by Frequency"<<endl; 
+
+        cerr << "3 -> Rank tuples by Dimensionality"<<endl;
+
+        cerr << "4 -> Compute representative with Sphere"<<endl;
+
+        cerr << "other -> out" << endl;
+
+        int choix;
+        cerr <<endl<<"Please, enter your choice: ";
+        cin >> choix;
+        cerr <<endl;
+        int set_size;
+
+        switch(choix){
+
+        case 1: cerr <<"++++++++ Materialize Dataset and the structure of pairs"<<endl;
+
+                NEG::print_pairs(dataName, listUSetDualSpace, structureNSC, d);
+                //print_data(dataName, donnees, k, d);
+                break;
+
+        case 2: cerr <<"++++++++ Rank tuples by Frequency"<<endl;
+
+                cerr <<endl<<"Please, enter your the result size: ";
+                cin >> set_size;
+                rank_F(dataName, donnees, structureNSC, n, k, d, set_size);
+                break;
+        
+        case 3: cerr <<"++++++++ Rank tuples by Dimensionality"<<endl;
+
+                cerr <<endl<<"Please, enter your the result size: ";
+                cin >> set_size;
+                rank_D(dataName, donnees, structureNSC, n, k, d, set_size);
+                break;
+        
+        case 4: cerr <<"++++++++ Run Sphere"<<endl;
+
+                cerr <<endl<<"Please, enter your the result size: ";
+                cin >> set_size;
+                representative_by_sphere(dataName, donnees, structureNSC, k, d, set_size);
+                break;
+
+        default: exit(0);break;
+
         }
-    timeToPerform=duree(timeToPerform);
-    displayResult(dataName, donnees.size(), d, k, "SKYCUBE", response_size, timeToPerform, NSC);
 
+    }
+    //***************************************************
+    // functions without menu
 
+    NEG::print_pairs(dataName, listUSetDualSpace, structureNSC, d);
+
+    //***************************************************
 
     if (kDom){
         structSize=0;
@@ -206,8 +272,8 @@ void experimentation_NSCwM(string dataName, TableTuple &donnees, Space d, DataTy
     timeToPerform=debut();
         for (i=0;i<N;i++){
             
-            response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, newIndexes, prvIndexes, subspaceN[i]);
-
+            //response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, newIndexes, prvIndexes, subspaceN[i]);
+            response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, n, subspaceN[i]);
         }
     
     timeToPerform=duree(timeToPerform);
@@ -215,7 +281,8 @@ void experimentation_NSCwM(string dataName, TableTuple &donnees, Space d, DataTy
     response_size=0;
     timeToPerform=debut();
         for (i=0;i<All;i++){
-            response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, newIndexes, prvIndexes, subspaceAll[i]);
+            //response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, newIndexes, prvIndexes, subspaceAll[i]);
+            response_size+=NEG::subspaceSkylineSize_NSC(structureNSC, n, subspaceAll[i]);
         }
     timeToPerform=duree(timeToPerform);
     displayResult(dataName, donnees.size(), d, k, "SKYCUBE", response_size, timeToPerform, NSCwM);
@@ -264,7 +331,7 @@ void experimentation_NSCwM(string dataName, TableTuple &donnees, Space d, DataTy
                 break;
 
         case 3: cerr <<"++++++++ Query on a subspace and skycube"<<endl;
-                NEG::skylinequery(dataName, donnees, structureNSC, newIndexes, prvIndexes, d, k, subspaceN, subspaceAll);
+                skylinequery(dataName, donnees, structureNSC, d, k, subspaceN, subspaceAll);
                 break;
 
         case 4: cerr <<"++++++++ Deletion of multiple tuples"<<endl;
@@ -346,6 +413,7 @@ void experimentSkycube(string dataName, string path, DataType k, DataType n, Spa
     vector<vector<Space>> listNTabSpace(N);
     for (i=1;i<=N;i++){
         spAux=rand() % All + 1;
+        spAux=All;
         subspaceN.push_back(spAux);
         listeAttributsPresents(spAux, d, listNTabSpace[i-1]);
         //displaySubspace(spAux, d);cout<<endl;

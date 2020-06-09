@@ -34,6 +34,98 @@ void visualisation_pairs(vector<USetDualSpace> listUSetDualSpace){
 
 }
 
+bool pairs_file_exists(string dataName, Space d, int n){
+
+    string const nomFichier("../structPairs/"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
+    ifstream f(nomFichier.c_str());
+    return f.good();
+
+}
+
+void load_pairs(string dataName, Space d, int n, vector<USetDualSpace> &listUSetDualSpace){
+
+    cout <<"*****loading_pairs*****"<<endl<<endl;
+    string const nomFichier("../structPairs/"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
+    ifstream file(nomFichier.c_str());
+    string line;
+    int line_counter=0;
+    while (std::getline(file, line)){
+        //cout << line<<endl;
+        
+        int pointer=0;
+        while (pointer <line.size()){
+            
+            // First split by ";"
+            string first_delimiter = ";";
+            int first_delimiter_position= line.find(first_delimiter,pointer);
+            //cout <<pointer<< " "<<first_delimiter_position<<endl;
+            string token = line.substr(pointer, first_delimiter_position-pointer);
+            
+            // Second split by "|"
+            {    
+                string second_delimiter = "|";
+                int second_delimiter_position= token.find(second_delimiter,0);
+                string X=token.substr(0, second_delimiter_position);
+                string Y=token.substr(second_delimiter_position+1, token.size());
+                DualSpace ds;
+                ds.dom=stoi(X);
+                ds.equ=stoi(Y);
+                listUSetDualSpace[line_counter].insert(ds);
+                //cout << X << " " << Y<<endl;
+            }
+
+            pointer=first_delimiter_position+1;
+            //cout <<token<<endl;
+        }
+        line_counter++;
+    }
+}
+
+void print_pairs(string dataName, vector<USetDualSpace> &listUSetDualSpace, NegSkyStr &structureNSC, Space d){
+
+    cout <<"*****printing_pairs*****"<<endl;
+
+    int n=listUSetDualSpace.size();
+    string const nomFichier1("../structPairs/"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n));
+    ofstream monFlux1(nomFichier1.c_str());
+    if (monFlux1){
+        for(int i=0; i<listUSetDualSpace.size(); i++){
+            //monFlux1 <<"t"<<i<<": ";
+            for (auto it_uset = listUSetDualSpace[i].begin(); it_uset!=listUSetDualSpace[i].end(); it_uset++){
+                monFlux1 <<it_uset->dom <<"|"<<it_uset->equ <<";";
+            }
+            monFlux1 <<endl;
+        }
+        monFlux1.close();
+    }
+    else{
+        cout << "ERROR: Couldn't open the file." << endl;
+    }
+
+    // string const nomFichier2("../structPairs/"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n)+"-T");
+    // ofstream monFlux2(nomFichier2.c_str());
+    // if (monFlux2){
+    //     for(int i=0; i<structureNSC.size(); i++){
+    //         monFlux2 <<structureNSC[i].first <<": ";
+    //         for (auto Y = structureNSC[i].second.begin(); Y!=structureNSC[i].second.end(); Y++){
+    //             monFlux2 << "( "<< Y->first << " | " ;
+    //             for (auto id: Y->second){
+    //                 monFlux2 << id << " ";
+    //             }
+    //             monFlux2 << ")"; 
+    //         }
+    //         monFlux2 <<endl;
+    //     }
+    //     monFlux2.close();
+    // }
+    // else{
+    //     cout << "ERROR: Couldn't open the file." << endl;
+    // }
+
+
+    cout <<endl<<"*****done"<<endl;
+}
+
 bool pet_pair(const DualSpace &sp1, const DualSpace &sp2 ){
     auto n1=sp1.dom + sp1.equ;
     auto n2=sp2.dom + sp2.equ;
@@ -93,7 +185,7 @@ long creationStructureNSC(NegSkyStrAux &structure, map<DataType,DataType> &newIn
     DataType nbTuples=0;
 
     for (i=0;i<(DataType)listUSetDualSpace.size();++i){ // on boucle sur tous les tuples taille n
-        if (listUSetDualSpace[i].size()!=1 || (listUSetDualSpace[i].begin())->dom<all){  
+        //if (listUSetDualSpace[i].size()!=1 || (listUSetDualSpace[i].begin())->dom<all){  // to discard completely dominated tuples 
             DataType idTuple=nbTuples;
             for (auto it=listUSetDualSpace[i].begin();it!=listUSetDualSpace[i].end();++it){ // on boucle sur tous les paris (X|Y) de ce tuple
                 Space spaceXY=it->dom+it->equ;
@@ -120,7 +212,7 @@ long creationStructureNSC(NegSkyStrAux &structure, map<DataType,DataType> &newIn
             newIndexes[i]=nbTuples;
             prvIndexes[nbTuples]=i;
             nbTuples++;
-        }
+        //}
     }
     return structSize;
 }
@@ -245,12 +337,12 @@ void negativeSkycubeAux(vector<USetDualSpace> &listUSetDualSpace, TableTuple& do
                 if(!trouve) it++;
             }
             //CompressionByGreedy
-            // size_t t1 = listUSetDualSpace[i].size();
-            // int nb=0;
-            // for(auto it=listUSetDualSpace[i].begin(); it!=listUSetDualSpace[i].end() ;++it) if(it->equ!=0) {nb++; break;}
-            // if((t1>1) && (nb!=0)){
-            //     fusionGloutonne(listUSetDualSpace[i], d);
-            // }
+            size_t t1 = listUSetDualSpace[i].size();
+            int nb=0;
+            for(auto it=listUSetDualSpace[i].begin(); it!=listUSetDualSpace[i].end() ;++it) if(it->equ!=0) {nb++; break;}
+            if((t1>1) && (nb!=0)){
+                fusionGloutonne(listUSetDualSpace[i], d);
+            }
         }
     }
 
@@ -301,11 +393,10 @@ long negativeSkycube(NegSkyStr &structure, map<DataType,DataType> &newIndexes, m
 
 
 
-bool* subspaceSkyline_NSC(NegSkyStr &structure, map<DataType,DataType> &newIndexes, map<DataType,DataType> &prvIndexes, const Space subspace){
+bool* subspaceSkyline_NSC(NegSkyStr &structure, int data_size, const Space subspace){
     DataType i;
-    DataType m=newIndexes.size();
-    bool* tableSkyline=new bool[m];
-    for (i=0;i<m;i++) tableSkyline[i]=true;
+    bool* tableSkyline=new bool[data_size];
+    for (i=0;i<data_size;i++) tableSkyline[i]=true;
     for (auto itXY=structure.rbegin();itXY!=structure.rend() && subspace<=(itXY->first);++itXY){
         if (estInclusDans(subspace, itXY->first)){
             for (auto itY=(itXY->second).begin();itY!=(itXY->second).end();++itY) {
@@ -317,15 +408,15 @@ bool* subspaceSkyline_NSC(NegSkyStr &structure, map<DataType,DataType> &newIndex
             }
         }
     }
-
+    //for (int j=0; j<m;j++) if (tableSkyline[j]) cout << j << endl; // to print ids in skyline
     return tableSkyline;
 }
 
-DataType subspaceSkylineSize_NSC(NegSkyStr &structure, map<DataType,DataType> &newIndexes, map<DataType,DataType> &prvIndexes, Space subspace){
+DataType subspaceSkylineSize_NSC(NegSkyStr &structure, int data_size, Space subspace){
+    
     DataType skySize;
-
-    bool* skyline=subspaceSkyline_NSC(structure, newIndexes, prvIndexes, subspace);
-    skySize=compteLesMarques(skyline, newIndexes.size());
+    bool* skyline=subspaceSkyline_NSC(structure, data_size, subspace);
+    skySize=compteLesMarques(skyline, data_size);
     delete[] skyline;
     return skySize;
 }
@@ -365,34 +456,6 @@ DataType subspaceSkylineSize_NSC_kDom(NegSkyStr &structure, map<DataType,DataTyp
 
 void displayResultv2(string dataName, DataType n, Space d, DataType k, string step, long structSize, double timeToPerform, int method){
     cout<<dataName<<" "<<n<<" "<<d<<" "<<k<<" "<<methodNamesDisplayed[method]<<" "<<NB_THREADS<<" "<<step<<" "<<structSize<<" "<<timeToPerform<<endl;
-}
-
-void skylinequery(string dataName, TableTuple &donnees, NegSkyStr structure0, map<DataType, DataType> newIndexes0, map<DataType, DataType> prvIndexes0, Space d, DataType k,vector<Space> &subspaceN, vector<Space> &subspaceAll){
-
-    Space subspace;
-
-    cerr << "Choose a subspace for the skyline query: ";
-
-    cin >> subspace;
-
-    //query on 1 subspace
-
-    int structSize=0;
-    double timeToPerform=debut();
-    structSize+=subspaceSkylineSize_NSC(structure0, newIndexes0, prvIndexes0, subspace);
-    timeToPerform=duree(timeToPerform);
-    displayResultv2(dataName, donnees.size(), d, k, "N=1", structSize, timeToPerform, NSC); 
-
-    //query on all subspaces
-
-    Space All=(1<<d)-1;
-    structSize=0;
-    timeToPerform=debut();
-    for (int i=0;i<All;i++){
-        structSize+=subspaceSkylineSize_NSC(structure0, newIndexes0, prvIndexes0, subspaceAll[i]);
-    }
-    timeToPerform=duree(timeToPerform);
-    displayResultv2(dataName, donnees.size(), d, k, "SKYCUBE", structSize, timeToPerform, NSC);
 }
 
 }

@@ -1,0 +1,6 @@
+datasets/*
+structPairs/*
+src/*.o
+regret/*
+src/exec_NSC
+src/cout

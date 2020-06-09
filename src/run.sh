@@ -16,4 +16,10 @@
 # 
 #
 
-./main INDE 100 10000 10 4 NAIF TREE CSC NSC NSCwM
+distribution=INDE
+dataset_size=100000
+distint_values=$(($dataset_size/100))
+space=8
+nb_threads=8
+
+./exec_NSC $distribution $distint_values $dataset_size $space $nb_threads NSC

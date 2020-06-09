@@ -87,16 +87,26 @@ void loadData(string dataName, string path, int n, int d, int &k, vector<Point> 
     }
 }
 
-void afficheDonnees(vector<Point> donnees, Space d){
-    DataType i, n=donnees.size();
-    Space j;
-    for (i=0;i<n;i++){
-        //cout<<"t"<<donnees[i][0]+1<<": ";
-        for (j=1;j<=d;j++){
-            cout<<donnees[i][j]<<" ";
+void print_data(string dataName, vector<Point> &donnees, DataType k, Space d){
+
+    cout <<"*****printing_data*****"<<endl;
+    int n=donnees.size();
+    string const nomFichier1("../datasets/"+dataName+"-d-"+std::to_string(d)+"-n-"+std::to_string(n)+"-k-"+std::to_string(k));
+    ofstream monFlux1(nomFichier1.c_str());
+    if (monFlux1){
+        for(int i=0; i<n; i++){
+            monFlux1 <<"t"<<i<<": ";
+            for (Space j=1;j<=d;j++){
+                monFlux1<<donnees[i][j]<<" ";
+            }
+            monFlux1 <<endl;
         }
-        cout<<endl;
+        monFlux1.close();
     }
+    else{
+        cout << "ERROR: Couldn't open the file." << endl;
+    }
+    cout <<endl<<"*****done"<<endl;
 }
 
 #endif // GENERATEUR_H_INCLUDED

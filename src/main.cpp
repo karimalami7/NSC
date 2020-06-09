@@ -13,7 +13,10 @@ int K_MIN=1;
 #include "nsc/negative.h"
 #include "nsc/negative_wM.h"
 #include "kdominance/kdomskycube.h"
+#include "sphere/sphere.h"
+#include "nsc/queries.h"
 #include "experimentations.h"
+
 
 
 int main(int argc,char **argv){
